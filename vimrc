@@ -225,13 +225,16 @@ let g:mkdp_theme = 'dark'
 let g:lightline = {
             \ 'colorscheme': 'solarized',
             \ 'active': {
-                \    'right': [['customFileType', 'customFormatEncode', 'customCursorPosition', 'customTime']]
+                \    'right': [
+                \ ['customTime'], 
+                \ ['customFileType', 'customCursorPosition'],
+                \ ['customFormatEncode']]
             \ },
             \ 'component': {
             \   'customFileType': '%Y',
             \   'customFormatEncode': '%{&fenc!=#""?&fenc:&enc}',
             \   'customCursorPosition': '%l:%c',
-            \   'customTime': '%{strftime("%H:%M:%S")}'
+            \   'customTime': '%{strftime("%H:%M")}'
             \ }, 
             \ }
 " others : e plugged/lightline.vim/colorscheme.md
@@ -365,6 +368,9 @@ noremap <leader>s :source<CR>
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
 
+" Go to Homepage
+nnoremap <leader>; :Startify<CR>
+
 " ------ end mapleader shortcut
 
 " OTHER VIM's PREFERENCES
@@ -372,6 +378,38 @@ nnoremap <Leader>O O<Esc>
 " Set to auto read when a file is changed from the outside
 set autoread
 au FocusGained,BufEnter * checktime
+
+" Create a custom header using figlet for welcome screen
+let g:startify_custom_header =
+            \ startify#pad(split(system('figlet -c VIM 2022'), '\n'))
+
+" Show modified and untracked git files
+" returns all modified files of the current git repo
+" `2>/dev/null` makes the command fail quietly, so that when we are not
+" in a git repo, the list will be empty
+function! s:gitModified()
+    let files = systemlist('git ls-files -m 2>/dev/null')
+    return map(files, "{'line': v:val, 'path': v:val}")
+endfunction
+
+" same as above, but show untracked files, honouring .gitignore
+function! s:gitUntracked()
+    let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
+    return map(files, "{'line': v:val, 'path': v:val}")
+endfunction
+
+let g:startify_lists = [
+            \ { 'type': 'files',     'header': ['   Last opened files']            },
+            \ { 'type': 'dir',       'header': ['   Folder : '. getcwd()] },
+            \ { 'type': 'sessions',  'header': ['   Sessions']       },
+            \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+            \ { 'type': function('s:gitModified'),  'header': ['   Git modified']},
+            \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
+            \ { 'type': 'commands',  'header': ['   Commands']       },
+            \ ]
+
+" Use NERDTree bookmarks
+let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 
 syntax on
 set laststatus=2
