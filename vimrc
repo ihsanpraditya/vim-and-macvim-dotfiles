@@ -253,10 +253,10 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 set cursorline
 
 " TERMINAL SETTING
-if $TERM =~ '^\(rxvt\|screen\|nsterm\|interix\|putty\|xterm\)\(-.*\)\?$'
+if $TERM =~ '^\(rxvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
     " opening vim in non gui available environment
     set notermguicolors
-elseif $TERM =~ '^\(tmux\|iterm\|vte\|gnome\|alacritty\)\(-.*\)\?$'
+elseif $TERM =~ '^\(tmux\|xterm\|vte\|gnome\|alacritty\)\(-.*\)\?$'
     " opening vim in gui available environment
     set termguicolors
 endif
