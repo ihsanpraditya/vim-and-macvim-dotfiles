@@ -71,6 +71,8 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'tomtom/tcomment_vim'
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown'
 
 " APPEARANCE
 Plug 'itchyny/lightline.vim' 
@@ -253,10 +255,10 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 set cursorline
 
 " TERMINAL SETTING
-if $TERM =~ '^\(rxvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
+if $TERM =~ '^\(rtmux\|xvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
     " opening vim in non gui available environment
     set notermguicolors
-elseif $TERM =~ '^\(tmux\|xterm\|vte\|gnome\|alacritty\)\(-.*\)\?$'
+elseif $TERM =~ '^\(xterm\|vte\|gnome\|alacritty\)\(-.*\)\?$'
     " opening vim in gui available environment
     set termguicolors
 endif
@@ -412,6 +414,7 @@ let g:startify_lists = [
 let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 
 syntax on
+set backspace=indent,eol,start
 set laststatus=2
 set expandtab
 set foldcolumn=1
