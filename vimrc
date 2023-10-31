@@ -1,7 +1,7 @@
-" START INDEX
+" INDEX
 " ------ MUST FIRST CONFIGURATION ------
 " VIM-PLUG (Minimalist VIM plugin manager)
-
+" Macvim Conf
 " 1. Vim's plugins configuration :
     " Provider (enhancing vim, used by completion)
     " Nerdtree (file explorer)
@@ -12,6 +12,8 @@
     " Tex-conceal (latex syntax rendering appearance inside code editor)
     " Markdownpreview
     " Lightline (status bar customization)
+    " Git Gutter
+    " ALE
 " 2. Vim's preferences :
     " Fzf search
     " Background switch button
@@ -27,19 +29,21 @@
     " Scrolling in insert mode
     " Scrolling for other split windows (just 2 windows)
     " Unmap ctrl-z for :stop
+    " auto-complete trigger with tab
     " Mapleader
 " 4. Other vim's preferences
 
 
-
-" ------ MUST FIRST CONFIGURATION ------
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""" ------ MUST FIRST CONFIGURATION ------
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MACVIM
 if has('gui_running')
   set lines=30 columns=90
   if has('gui_gtk2')
-    set guifont=Mocaco:14
+    set guifont=Mocaco:h14
   elseif has('gui_macvim')
-    set guifont=Hack\ Nerd\ Font\ Mono\:h14
+    set guifont=CaskaydiaCove\ Nerd\ Font\:h16
     set macligatures
     set macmeta
     set guioptions+=T
@@ -64,8 +68,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin' " Git symbol at Nerd explorer
 " EDITING
 Plug 'jiangmiao/auto-pairs' " auto pair bracket, etc
 Plug 'tpope/vim-surround' " Surround shortcut
-Plug 'mattn/emmet-vim'
-Plug 'Yggdroot/indentLine' " Show indentation
+Plug 'mattn/emmet-vim' " HTML CSS toolkit
+Plug 'Yggdroot/indentLine' " Show indentation line
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multi cursor
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
@@ -73,6 +77,7 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
+Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
 
 " APPEARANCE
 Plug 'itchyny/lightline.vim' 
@@ -80,26 +85,26 @@ Plug 'altercation/vim-colors-solarized' " theme
 Plug 'tomasr/molokai' " theme
 Plug 'dracula/vim', { 'as': 'dracula' } " theme
 Plug 'NLKNguyen/papercolor-theme' " theme by Goole
+
+" LINTER
+Plug 'dense-analysis/ale' " Check syntax in Vim/Neovim asynchronously and fix files, with Language Server Protocol (LSP) 
+
 call plug#end()
 
 filetype plugin indent on " You may do, after vim-plug
 
-" PROVIDER
-" PYTHON for mac/pc
-let g:python3_host_prog = '/Users/user/.pyenv/shims/python3'
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""" PROVIDER
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PYTHON for my mac
+let g:python3_host_prog = '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3'
+let g:loaded_ruby_provider = 0 " RUBY
+let g:loaded_node_provider = 0 " NODEJS
+let g:loaded_perl_provider = 0 " PERL
 
-" RUBY for mac/pc
-" let g:ruby_host_prog = '/usr/bin/ruby'
-let g:loaded_ruby_provider = 0
-
-" NODEJS for mac/pc
-" let g:node_host_prog = '/usr/local/bin/node'
-let g:loaded_node_provider = 0
-
-" PERL for mac/pc
-" let g:perl_host_prog = '/usr/local/bin/perl'
-let g:loaded_perl_provider = 0
-
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""" PLUGINS SETTINGS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTREE
 nnoremap <C-t> :NERDTreeToggle<CR>
 
@@ -138,9 +143,8 @@ let NERDTreeShowLineNumbers=1
 let g:html_indent_script1 = "inc"
 let g:html_indent_style1 = "inc"
 let g:html_indent_attribute = 1
-let g:indentLine_enabled=0
-let g:indentLine_char_list=[]
-let g:indentLine_char_list=['|', '¦', '┆', '┊']
+let g:indentLine_enabled = 0 " 0 for disable, to enable type :IndentLinesEnable
+let g:indentLine_char_list = ['¦', '┆', '┊']
 let g:indentLine_color_term = 239
 let g:indentLine_color_gui = '#A4E57E'
 let g:indentLine_color_tty_light = 7 " (default: 4)
@@ -153,15 +157,12 @@ let g:VM_maps["Add Cursor Down"] = '<C-j>'
 let g:VM_mouse_mappings = 1
 
 " EMMET
-"allow emmet in all mode
+" allow emmet in all mode
 let g:user_emmet_mode='a'
  
 " allow emmet for html and css only
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
-
-" redefining emmet key
-let g:user_emmet_leader_key='<C-z>'
 
 " Snippet to add meta tag for responsiveness
 let g:user_emmet_settings = {
@@ -189,8 +190,6 @@ let g:user_emmet_settings = {
 let g:tex_conceal_frac=1
 let g:tex_superscripts= "[0-9a-zA-W.,:;+-<>/()=]"
 let g:tex_subscripts= "[0-9aehijklmnoprstuvx,+-/().]"
-" recommended setting
-set conceallevel=2
 let g:tex_conceal='abdgm'
 
 " MARKDOWN
@@ -222,8 +221,18 @@ let g:mkdp_port = ''
 let g:mkdp_page_title = '「${name}」'
 let g:mkdp_filetypes = ['markdown']
 let g:mkdp_theme = 'dark'
+" Below markdown syntax extension, default by developer is off
+let g:vim_markdown_math = 1
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_toml_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+let g:vim_markdown_strikethrough = 1
+let g:vim_markdown_autowrite = 1
+let g:vim_markdown_auto_insert_bullets = 1 " turning it on can cause problem when wrapping
+let g:vim_markdown_new_list_item_indent = 0
+let g:vim_markdown_edit_url_in = 'tab'
 
-" LIGHTLINE
+"LIGHTLINE
 let g:lightline = {
             \ 'colorscheme': 'solarized',
             \ 'active': {
@@ -240,19 +249,30 @@ let g:lightline = {
             \ }, 
             \ }
 " others : e plugged/lightline.vim/colorscheme.md
-"
 
+" GIT GUTTER
+" :GitGutterDisable " make the default is disable (illegal setting)
+
+" ALE
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\   'vim': ['vimls'],
+\} 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""" PREFERENCES
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FZF SEARCH
 set rtp+=/usr/local/opt/fzf
 
-" BACKGROUND SWITCH DARK-LIGHT FROM SOLARIZED THEME
-call togglebg#map("<F4>")
-
 " CURSOR
-set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-    \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-    \,sm:block-blinkwait175-blinkoff150-blinkon175
-set cursorline
+" set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+"     \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+"     \,sm:block-blinkwait175-blinkoff150-blinkon175
+set cursorline " Highlighting line where a cursor is
+" Cursor shape for insert mode to bar shape
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
 
 " TERMINAL SETTING
 if $TERM =~ '^\(rtmux\|xvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
@@ -308,6 +328,9 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""" MAPPING
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TAB
 nnoremap <Tab> gt
 " nnoremap <S-Tab> gT
@@ -331,6 +354,10 @@ nmap <M-b> <c-w>w<c-b><c-w>wh " Scroll up one screen other pane
 " UNMAP CTRL-Z FOR :STOP then for save
 map <C-z> :w<CR>
 inoremap jk <Esc>
+
+" AUTO-COMPLETE TRIGGER WITH TAB
+" :imap <Tab> <C-X><C-V>
+" :imap <S-Tab> <C-P>
 
 " MAPLEADER
 " ------ start mapleader shortcut
@@ -371,53 +398,40 @@ nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
 
 " Go to Homepage
-nnoremap <leader>; :Startify<CR>
+nnoremap <leader>h :Startify<CR>
+
+noremap <F5> :IndentLinesToggle<CR>
+
+" redefining emmet key
+let g:user_emmet_leader_key='<C-z>'
+
+" BACKGROUND SWITCH DARK-LIGHT FROM SOLARIZED THEME
+call togglebg#map("<F5>")
 
 " ------ end mapleader shortcut
-
-" OTHER VIM's PREFERENCES
-
+" ------ end mapping
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""" OTHER VIM's PREFERENCES
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set to auto read when a file is changed from the outside
 set autoread
 au FocusGained,BufEnter * checktime
 
-" Create a custom header using figlet for welcome screen
-let g:startify_custom_header =
-            \ startify#pad(split(system('figlet -c VIM 2022'), '\n'))
-
-" Show modified and untracked git files
-" returns all modified files of the current git repo
-" `2>/dev/null` makes the command fail quietly, so that when we are not
-" in a git repo, the list will be empty
-function! s:gitModified()
-    let files = systemlist('git ls-files -m 2>/dev/null')
-    return map(files, "{'line': v:val, 'path': v:val}")
-endfunction
-
-" same as above, but show untracked files, honouring .gitignore
-function! s:gitUntracked()
-    let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
-    return map(files, "{'line': v:val, 'path': v:val}")
-endfunction
-
-let g:startify_lists = [
-            \ { 'type': 'files',     'header': ['   Last opened files']            },
-            \ { 'type': 'dir',       'header': ['   Folder : '. getcwd()] },
-            \ { 'type': 'sessions',  'header': ['   Sessions']       },
-            \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-            \ { 'type': function('s:gitModified'),  'header': ['   Git modified']},
-            \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
-            \ { 'type': 'commands',  'header': ['   Commands']       },
-            \ ]
+" " Create a custom header using figlet for welcome screen
+" let g:startify_custom_header =
+"             \ startify#pad(split(system('figlet -c VIM 2022'), '\n'))
 
 " Use NERDTree bookmarks
 let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 
 syntax on
 set backspace=indent,eol,start
+set conceallevel=2
 set laststatus=2
 set expandtab
 set foldcolumn=1
+set hlsearch
+set incsearch
 set ignorecase smartcase
 set lazyredraw
 set mouse=nvi
@@ -425,7 +439,10 @@ set nobackup
 set noshowmode
 set noswapfile
 set nowb
-set number relativenumber
+" set number relativenumber
 set shiftwidth=4
+" set signcolumn=off
 set synmaxcol=120
+" set updatetime=4000
 set wrap
+set wildmenu
