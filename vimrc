@@ -23,6 +23,7 @@
     " Colorscheme
     " Transparent
     " Better rainbow parentheses
+    " HTML, SQL inside PHP highlighting
 " 3. Mapping :
     " tab
     " Map clearing highlighting after searching to <esc>
@@ -43,12 +44,14 @@ if has('gui_running')
   if has('gui_gtk2')
     set guifont=Mocaco:h14
   elseif has('gui_macvim')
-    set guifont=CaskaydiaCove\ Nerd\ Font\:h16
+    set guifont=CaskaydiaCove\ Nerd\ Font\ Mono\:h16
     set macligatures
     set macmeta
     set guioptions+=T
   elseif has('gui_win32')
     set guifont=Consolas:h10
+  else
+    set guifont=Menlo:h12
   endif
 endif
 
@@ -78,6 +81,8 @@ Plug 'tomtom/tcomment_vim'
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
 Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
+Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
+Plug 'dahu/VimCompletesMe' " super light-weight tab completion plugin
 
 " APPEARANCE
 Plug 'itchyny/lightline.vim' 
@@ -94,7 +99,7 @@ call plug#end()
 filetype plugin indent on " You may do, after vim-plug
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" PROVIDER
+"""""""""" PROVIDER **************************************** 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PYTHON for my mac
 let g:python3_host_prog = '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3'
@@ -103,7 +108,7 @@ let g:loaded_node_provider = 0 " NODEJS
 let g:loaded_perl_provider = 0 " PERL
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" PLUGINS SETTINGS
+"""""""""" PLUGINS SETTINGS ********************************
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTREE
 nnoremap <C-t> :NERDTreeToggle<CR>
@@ -125,44 +130,48 @@ autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_
 
 " NERDTreeGit Configuration
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜', 
-                \ 'Unmerged'  :'═', 
-                \ 'Deleted'   :'✖', 
-                \ 'Dirty'     :'✗', 
-                \ 'Ignored'   :'☒', 
-                \ 'Clean'     :'✔︎', 
-                \ 'Unknown'   :'?', }
-
+    \ 'Modified'  :'✹',
+    \ 'Staged'    :'✚',
+    \ 'Untracked' :'✭',
+    \ 'Renamed'   :'➜', 
+    \ 'Unmerged'  :'═', 
+    \ 'Deleted'   :'✖', 
+    \ 'Dirty'     :'✗', 
+    \ 'Ignored'   :'☒', 
+    \ 'Clean'     :'✔︎', 
+    \ 'Unknown'   :'?',
+}
 let NERDTreeShowLineNumbers=1
 
 " INDENT
 " set the indent for the first line after <script> and <style>
-let g:html_indent_script1 = "inc"
-let g:html_indent_style1 = "inc"
-let g:html_indent_attribute = 1
-let g:indentLine_enabled = 0 " 0 for disable, to enable type :IndentLinesEnable
-let g:indentLine_char_list = ['¦', '┆', '┊']
-let g:indentLine_color_term = 239
-let g:indentLine_color_gui = '#A4E57E'
+let g:html_indent_script1        = "inc"
+let g:html_indent_style1         = "inc"
+let g:html_indent_attribute      = 1
+let g:indentLine_enabled         = 0 " 0 for disable, to enable type :IndentLinesEnable
+let g:indentLine_char_list       = ['¦', '┆', '┊']
+let g:indentLine_color_term      = 239
+let g:indentLine_color_gui       = '#A4E57E'
 let g:indentLine_color_tty_light = 7 " (default: 4)
-let g:indentLine_color_dark = 1 " (default: 2)
+let g:indentLine_color_dark      = 1 " (default: 2)
 
 " VISUAL-MULTI
-let g:VM_maps = {} 
+let g:VM_maps                    = {}
 let g:VM_maps["Add Cursor Up"]   = '<C-k>'
 let g:VM_maps["Add Cursor Down"] = '<C-j>'
-let g:VM_mouse_mappings = 1
+let g:VM_maps["Exit"]            = '<C-c>'
+let g:VM_mouse_mappings          = 1
 
 " EMMET
 " allow emmet in all mode
-let g:user_emmet_mode='a'
+let g:user_emmet_mode = 'a'
+
+" Emmet leader key
+let g:user_emmet_leader_key = '<C-z>'
  
 " allow emmet for html and css only
 let g:user_emmet_install_global = 0
-autocmd FileType html,css EmmetInstall
+autocmd FileType html,css,php EmmetInstall
 
 " Snippet to add meta tag for responsiveness
 let g:user_emmet_settings = {
@@ -187,50 +196,50 @@ let g:user_emmet_settings = {
 \}
 
 " TEX-CONCEAL
-let g:tex_conceal_frac=1
-let g:tex_superscripts= "[0-9a-zA-W.,:;+-<>/()=]"
-let g:tex_subscripts= "[0-9aehijklmnoprstuvx,+-/().]"
-let g:tex_conceal='abdgm'
+let g:tex_conceal_frac = 1
+let g:tex_superscripts = "[0-9a-zA-W.,:;+-<>/()          = ]"
+let g:tex_subscripts   = "[0-9aehijklmnoprstuvx,+-/().]"
+let g:tex_conceal      = 'abdgm'
 
 " MARKDOWN
-let g:mkdp_auto_start = 0
-let g:mkdp_auto_close = 1
-let g:mkdp_refresh_slow = 0
+let g:mkdp_auto_start         = 0
+let g:mkdp_auto_close         = 1
+let g:mkdp_refresh_slow       = 0
 let g:mkdp_command_for_global = 0
-let g:mkdp_open_to_the_world = 0
-let g:mkdp_open_ip = ''
-let g:mkdp_browser = '/Applications/Firefox.app'
-let g:mkdp_echo_preview_url = 0
-let g:mkdp_browserfunc = ''
-let g:mkdp_preview_options = {
-    \ 'mkit': {},
-    \ 'katex': {},
-    \ 'uml': {},
-    \ 'maid': {},
-    \ 'disable_sync_scroll': 0,
-    \ 'sync_scroll_type': 'middle',
-    \ 'hide_yaml_meta': 1,
-    \ 'sequence_diagrams': {},
-    \ 'flowchart_diagrams': {},
-    \ 'content_editable': v:false,
-    \ 'disable_filename': 0
+let g:mkdp_open_to_the_world  = 0
+let g:mkdp_open_ip            = ''
+let g:mkdp_browser            = '/Applications/Firefox.app'
+let g:mkdp_echo_preview_url   = 0
+let g:mkdp_browserfunc        = ''
+let g:mkdp_preview_options    = {
+    \ 'mkit':                 {},
+    \ 'katex':                {},
+    \ 'uml':                  {},
+    \ 'maid':                 {},
+    \ 'disable_sync_scroll':  0,
+    \ 'sync_scroll_type':     'middle',
+    \ 'hide_yaml_meta':       1,
+    \ 'sequence_diagrams':    {},
+    \ 'flowchart_diagrams':   {},
+    \ 'content_editable':     v:false,
+    \ 'disable_filename':     0
     \ }
-let g:mkdp_markdown_css = ''
+let g:mkdp_markdown_css  = ''
 let g:mkdp_highlight_css = ''
-let g:mkdp_port = ''
-let g:mkdp_page_title = '「${name}」'
-let g:mkdp_filetypes = ['markdown']
-let g:mkdp_theme = 'dark'
+let g:mkdp_port          = ''
+let g:mkdp_page_title    = '「${name}」'
+let g:mkdp_filetypes     = ['markdown']
+let g:mkdp_theme         = 'dark'
 " Below markdown syntax extension, default by developer is off
-let g:vim_markdown_math = 1
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_toml_frontmatter = 1
-let g:vim_markdown_json_frontmatter = 1
-let g:vim_markdown_strikethrough = 1
-let g:vim_markdown_autowrite = 1
-let g:vim_markdown_auto_insert_bullets = 1 " turning it on can cause problem when wrapping
+let g:vim_markdown_math                 = 1
+let g:vim_markdown_frontmatter          = 1
+let g:vim_markdown_toml_frontmatter     = 1
+let g:vim_markdown_json_frontmatter     = 1
+let g:vim_markdown_strikethrough        = 1
+let g:vim_markdown_autowrite            = 1
+let g:vim_markdown_auto_insert_bullets  = 1 " turning it on can cause problem when wrapping
 let g:vim_markdown_new_list_item_indent = 0
-let g:vim_markdown_edit_url_in = 'tab'
+let g:vim_markdown_edit_url_in          = 'tab'
 
 "LIGHTLINE
 let g:lightline = {
@@ -260,7 +269,7 @@ let g:ale_linters = {
 \} 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" PREFERENCES
+"""""""""" PREFERENCES """""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FZF SEARCH
 set rtp+=/usr/local/opt/fzf
@@ -293,7 +302,7 @@ hi Comment cterm=italic gui=italic ctermfg=DarkGray guifg=Gray
 hi Pmenu ctermbg=DarkGreen
 
 " COLORSCHEME
-colorscheme molokai
+colorscheme PaperColor
 " light color: zellner, peachpuff, shine(dont use),morning(not too light, good for night shift), delek, PaperColor 
 " dark color:
 " desert: is like molokai
@@ -328,13 +337,16 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
+" HTML, SQL INSIDE PHP HIGHLIGHTING
+let php_htmlInStrings = 1
+let php_sql_query=1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""" MAPPING
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TAB
-nnoremap <Tab> gt
+" nnoremap <Tab> gt
 " nnoremap <S-Tab> gT
-nnoremap <silent> <S-t> :tabnew<CR>
+" nnoremap <silent> <S-t> :tabnew<CR>
 
 " MAP CLEARING HIGHLIGHTING AFTER SEARCHING TO <ESC>
 map <esc> :noh <CR> " Clearing highlight after searching every you click <esc>
@@ -352,7 +364,7 @@ nmap <M-f> <c-w>w<c-f><c-w>wh " Scroll down one screen other pane
 nmap <M-b> <c-w>w<c-b><c-w>wh " Scroll up one screen other pane
 
 " UNMAP CTRL-Z FOR :STOP then for save
-map <C-z> :w<CR>
+" map <C-z> :w<CR> " now it's used by Emmet leader key
 inoremap jk <Esc>
 
 " AUTO-COMPLETE TRIGGER WITH TAB
@@ -400,15 +412,30 @@ nnoremap <Leader>O O<Esc>
 " Go to Homepage
 nnoremap <leader>h :Startify<CR>
 
-noremap <F5> :IndentLinesToggle<CR>
+noremap <F4> :IndentLinesToggle<CR>
 
 " redefining emmet key
 let g:user_emmet_leader_key='<C-z>'
 
 " BACKGROUND SWITCH DARK-LIGHT FROM SOLARIZED THEME
 call togglebg#map("<F5>")
+" nnoremap <F5> :let &bg=(&bg=='light'?'dark':'light')<cr>
 
 " ------ end mapleader shortcut
+
+" Twidle Case
+function! TwiddleCase(str)
+    if a:str ==# toupper(a:str)
+        let result = tolower(a:str)
+    elseif a:str ==# tolower(a:str)
+        let result = substitute(a:str,'\(\<\w\+\>\)', '\u\1', 'g')
+    else
+        let result = toupper(a:str)
+    endif
+    return result
+endfunction
+vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
+" With the following (for example, in vimrc), you can visually select text then press ~ to convert the text to UPPER CASE, then to lower case, then to Title Case. Keep pressing ~ until you get the case you 
 " ------ end mapping
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""" OTHER VIM's PREFERENCES
@@ -424,25 +451,27 @@ au FocusGained,BufEnter * checktime
 " Use NERDTree bookmarks
 let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 
-syntax on
 set backspace=indent,eol,start
 set conceallevel=2
 set laststatus=2
 set expandtab
+set exrc
 set foldcolumn=1
 set hlsearch
 set incsearch
 set ignorecase smartcase
 set lazyredraw
+set linebreak
 set mouse=nvi
 set nobackup
 set noshowmode
 set noswapfile
 set nowb
-" set number relativenumber
+set number relativenumber
+set secure
 set shiftwidth=4
 " set signcolumn=off
-set synmaxcol=120
-" set updatetime=4000
+" set synmaxcol=0 " zero will makes highligthing all line and slow down for
+" long line
 set wrap
 set wildmenu
