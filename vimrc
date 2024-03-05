@@ -1,7 +1,9 @@
-" INDEX
-" ------ MUST FIRST CONFIGURATION ------
-" VIM-PLUG (Minimalist VIM plugin manager)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""" INDEX """""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Frequently Visited References
 " Macvim Conf
+" VIM-PLUG (Minimalist VIM plugin manager)
 " 1. Vim's plugins configuration :
     " Provider (enhancing vim, used by completion)
     " Nerdtree (file explorer)
@@ -14,6 +16,9 @@
     " Lightline (status bar customization)
     " Git Gutter
     " ALE
+    " Matchit
+    " Ultisnips
+    " FZF VIM
 " 2. Vim's preferences :
     " Fzf search
     " Background switch button
@@ -21,6 +26,7 @@
     " Terminal setting
     " Coloring
     " Colorscheme
+    " Seoul256
     " Transparent
     " Better rainbow parentheses
     " HTML, SQL inside PHP highlighting
@@ -34,13 +40,17 @@
     " Mapleader
 " 4. Other vim's preferences
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""" INDEX """""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" ------ MUST FIRST CONFIGURATION ------
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" FREQUENTLY VISITED REFERENCES
+"
+
 " MACVIM
 if has('gui_running')
   set lines=30 columns=90
+  set t_Co=256
   if has('gui_gtk2')
     set guifont=Mocaco:h14
   elseif has('gui_macvim')
@@ -55,22 +65,26 @@ if has('gui_running')
   endif
 endif
 
+" VIM-PLUG
 " required before run vim-plug
 set nocompatible " Turn off compatible mode.
 set nomodeline " Turn off modeline support.
 filetype off " Required Firstly
 
-" VIM-PLUG
+" running vim-plug
 call plug#begin('~/.vim/plugged')
  
 " APP FEATURE
 Plug 'mhinz/vim-startify' " welcome page
 Plug 'scrooloose/nerdtree' " file explorer at side bar.
 Plug 'Xuyuanp/nerdtree-git-plugin' " Git symbol at Nerd explorer
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " EDITING
 Plug 'jiangmiao/auto-pairs' " auto pair bracket, etc
 Plug 'tpope/vim-surround' " Surround shortcut
+Plug 'tpope/vim-fugitive' " A Git wrapper
 Plug 'mattn/emmet-vim' " HTML CSS toolkit
 Plug 'Yggdroot/indentLine' " Show indentation line
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multi cursor
@@ -83,6 +97,8 @@ Plug 'preservim/vim-markdown'
 Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
 Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
 Plug 'dahu/VimCompletesMe' " super light-weight tab completion plugin
+Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
+Plug 'honza/vim-snippets' " Snippets library
 
 " APPEARANCE
 Plug 'itchyny/lightline.vim' 
@@ -90,6 +106,8 @@ Plug 'altercation/vim-colors-solarized' " theme
 Plug 'tomasr/molokai' " theme
 Plug 'dracula/vim', { 'as': 'dracula' } " theme
 Plug 'NLKNguyen/papercolor-theme' " theme by Goole
+Plug 'safv12/andromeda.vim' " Darktheme from vscode
+Plug 'junegunn/seoul256.vim' "🌳 Low-contrast Vim color scheme based on Seoul Colors 
 
 " LINTER
 Plug 'dense-analysis/ale' " Check syntax in Vim/Neovim asynchronously and fix files, with Language Server Protocol (LSP) 
@@ -111,7 +129,7 @@ let g:loaded_perl_provider = 0 " PERL
 """""""""" PLUGINS SETTINGS ********************************
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTREE
-nnoremap <C-t> :NERDTreeToggle<CR>
+" nnoremap <C-t> :NERDTreeToggle<CR>
 
 " Start NERDTree when Vim starts with a directory argument.
 autocmd StdinReadPre * let s:std_in=1
@@ -139,8 +157,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ 'Dirty'     :'✗', 
     \ 'Ignored'   :'☒', 
     \ 'Clean'     :'✔︎', 
-    \ 'Unknown'   :'?',
-}
+    \ 'Unknown'   :'?', }
 let NERDTreeShowLineNumbers=1
 
 " INDENT
@@ -167,7 +184,7 @@ let g:VM_mouse_mappings          = 1
 let g:user_emmet_mode = 'a'
 
 " Emmet leader key
-let g:user_emmet_leader_key = '<C-z>'
+let g:user_emmet_leader_key = '<C-s>'
  
 " allow emmet for html and css only
 let g:user_emmet_install_global = 0
@@ -191,17 +208,19 @@ let g:user_emmet_settings = {
 \              ."</head>\n"
 \              ."<body>\n\t${child}|\n</body>\n"
 \              ."</html>",
+\	'pla': "placeholder=\"|\"",
 \    },
 \  },
 \}
 
 " TEX-CONCEAL
+set conceallevel=2
 let g:tex_conceal_frac = 1
 let g:tex_superscripts = "[0-9a-zA-W.,:;+-<>/()          = ]"
 let g:tex_subscripts   = "[0-9aehijklmnoprstuvx,+-/().]"
 let g:tex_conceal      = 'abdgm'
 
-" MARKDOWN
+" MARKDOWNPREVIEW
 let g:mkdp_auto_start         = 0
 let g:mkdp_auto_close         = 1
 let g:mkdp_refresh_slow       = 0
@@ -227,9 +246,9 @@ let g:mkdp_preview_options    = {
 let g:mkdp_markdown_css  = ''
 let g:mkdp_highlight_css = ''
 let g:mkdp_port          = ''
-let g:mkdp_page_title    = '「${name}」'
+let g:mkdp_page_title    = '${name}'
 let g:mkdp_filetypes     = ['markdown']
-let g:mkdp_theme         = 'dark'
+" let g:mkdp_theme         = 'dark' " prefer default system
 " Below markdown syntax extension, default by developer is off
 let g:vim_markdown_math                 = 1
 let g:vim_markdown_frontmatter          = 1
@@ -242,8 +261,10 @@ let g:vim_markdown_new_list_item_indent = 0
 let g:vim_markdown_edit_url_in          = 'tab'
 
 "LIGHTLINE
+set laststatus=2
+set noshowmode " hide default statusline
 let g:lightline = {
-            \ 'colorscheme': 'solarized',
+            \ 'colorscheme': 'powerline',
             \ 'active': {
                 \    'right': [
                 \ ['customTime'], 
@@ -267,6 +288,27 @@ let g:ale_linters = {
 \   'javascript': ['eslint'],
 \   'vim': ['vimls'],
 \} 
+
+" MATCHIT
+if has('syntax') && has('eval')
+    packadd! matchit
+endif
+" To use the matchit plugin after Vim has started, execute this command:
+" packadd matchit
+" The default is disabled, so if you feel Vim goes slow then disable matchit.
+
+" ULTISNIPS
+" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<C-a>"
+let g:UltiSnipsJumpForwardTrigger="<C-n>"
+let g:UltiSnipsJumpBackwardTrigger="<C-b>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+" FZF VIM
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""" PREFERENCES """""""""""""""""""""""""""""""""""""
@@ -302,10 +344,53 @@ hi Comment cterm=italic gui=italic ctermfg=DarkGray guifg=Gray
 hi Pmenu ctermbg=DarkGreen
 
 " COLORSCHEME
-colorscheme PaperColor
-" light color: zellner, peachpuff, shine(dont use),morning(not too light, good for night shift), delek, PaperColor 
-" dark color:
-" desert: is like molokai
+set background=dark " you have to put set bg before colo cmd
+colorscheme retrobox
+" LIGHT COLOR
+" Blue (but set bg to dark, wkwk)
+" delek 
+" morning(not too light, good for night shift) 
+" peachpuff 
+" shine(dont use)
+" zellner 
+""""""""""""""""""""""""""""""
+" DARK COLOR
+" Andromeda
+" DarkBlue
+" desert
+" elflord
+" evening
+" habamax
+" industry
+" koehler
+" macvim (not too good for gitgutter)
+" murphy
+" pablo
+" ron
+" slate (looks modern but light)
+" sorbet (beautiful purple)
+" torte
+" molokai
+" zaibatsu (more beautiful purple)
+
+" AMBI COLOR
+" lunaperche
+" PaperColor 
+" quiet (no syntax)
+" retrobox
+" solarized
+" wildcharm
+
+" SEOUL256
+" seoul256 (dark):
+"   range:   233 (darkest) ~ 239 (lightest)
+"   default: 237
+" let g:seoul256_background = 237
+
+" seoul256 (light):
+"   range:   252 (darkest) ~ 256 (lightest)
+"   default: 253
+" let g:seoul256_light_background = 253
 
 " TRANSPARENT
 hi Normal ctermfg=NONE ctermbg=NONE guibg=NONE 
@@ -373,7 +458,7 @@ inoremap jk <Esc>
 
 " MAPLEADER
 " ------ start mapleader shortcut
-let mapleader = "," " With a map leader it's possible to do extra key combinations like <leader>w saves the current file
+let mapleader = " " " With a map leader it's possible to do extra key combinations like <leader>w saves the current file
 " Fast saving
 nmap <leader>w :w!<CR>
 
@@ -414,14 +499,18 @@ nnoremap <leader>h :Startify<CR>
 
 noremap <F4> :IndentLinesToggle<CR>
 
+nnoremap <Leader>tt :NERDTreeToggle<CR>
+
+nnoremap <Leader>f :Files<CR>
+
+" ------ END MAPLEADER SHORTCUT
+
 " redefining emmet key
 let g:user_emmet_leader_key='<C-z>'
 
 " BACKGROUND SWITCH DARK-LIGHT FROM SOLARIZED THEME
 call togglebg#map("<F5>")
 " nnoremap <F5> :let &bg=(&bg=='light'?'dark':'light')<cr>
-
-" ------ end mapleader shortcut
 
 " Twidle Case
 function! TwiddleCase(str)
@@ -436,7 +525,7 @@ function! TwiddleCase(str)
 endfunction
 vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
 " With the following (for example, in vimrc), you can visually select text then press ~ to convert the text to UPPER CASE, then to lower case, then to Title Case. Keep pressing ~ until you get the case you 
-" ------ end mapping
+" ------ END MAPPING
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""" OTHER VIM's PREFERENCES
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -451,12 +540,12 @@ au FocusGained,BufEnter * checktime
 " Use NERDTree bookmarks
 let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 
+set autoindent
 set backspace=indent,eol,start
-set conceallevel=2
-set laststatus=2
-set expandtab
+set noexpandtab
 set exrc
 set foldcolumn=1
+set foldlevel=2
 set hlsearch
 set incsearch
 set ignorecase smartcase
@@ -464,14 +553,15 @@ set lazyredraw
 set linebreak
 set mouse=nvi
 set nobackup
-set noshowmode
 set noswapfile
 set nowb
 set number relativenumber
 set secure
 set shiftwidth=4
+set softtabstop=4 " These two should have a same value
 " set signcolumn=off
 " set synmaxcol=0 " zero will makes highligthing all line and slow down for
 " long line
-set wrap
+set nowrap
 set wildmenu
+set wildoptions=pum
