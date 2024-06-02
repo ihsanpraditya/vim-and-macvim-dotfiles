@@ -2,5 +2,14 @@
 */.DS_Store
 .netrwhist
 autoload/
+colors/
+compiler/
+doc/
+ftdetect/
+ftplugin/
+indent/
+keymap/
 plugged/
+plugin/
+syntax/
 undodir/

@@ -96,7 +96,7 @@ Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
 Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
 Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
-Plug 'dahu/VimCompletesMe' " super light-weight tab completion plugin
+Plug 'jayli/vim-easycomplete' " A Fast and Minimalism Style Completion Plugin for vim/nvim.
 Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
 Plug 'honza/vim-snippets' " Snippets library
 
@@ -115,15 +115,6 @@ Plug 'dense-analysis/ale' " Check syntax in Vim/Neovim asynchronously and fix fi
 call plug#end()
 
 filetype plugin indent on " You may do, after vim-plug
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" PROVIDER **************************************** 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PYTHON for my mac
-let g:python3_host_prog = '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3'
-let g:loaded_ruby_provider = 0 " RUBY
-let g:loaded_node_provider = 0 " NODEJS
-let g:loaded_perl_provider = 0 " PERL
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""" PLUGINS SETTINGS ********************************
@@ -301,9 +292,9 @@ endif
 " Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
 " - https://github.com/Valloric/YouCompleteMe
 " - https://github.com/nvim-lua/completion-nvim
-let g:UltiSnipsExpandTrigger="<C-a>"
-let g:UltiSnipsJumpForwardTrigger="<C-n>"
-let g:UltiSnipsJumpBackwardTrigger="<C-b>"
+let g:UltiSnipsExpandTrigger="<Tab>"
+let g:UltiSnipsJumpForwardTrigger="<Tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
@@ -345,7 +336,7 @@ hi Pmenu ctermbg=DarkGreen
 
 " COLORSCHEME
 set background=dark " you have to put set bg before colo cmd
-colorscheme retrobox
+colorscheme darkblue
 " LIGHT COLOR
 " Blue (but set bg to dark, wkwk)
 " delek 
