@@ -47,24 +47,6 @@
 " FREQUENTLY VISITED REFERENCES
 "
 
-" MACVIM
-if has('gui_running')
-  set lines=30 columns=90
-  set t_Co=256
-  if has('gui_gtk2')
-    set guifont=Mocaco:h14
-  elseif has('gui_macvim')
-    set guifont=CaskaydiaCove\ Nerd\ Font\ Mono\:h16
-    set macligatures
-    set macmeta
-    set guioptions+=T
-  elseif has('gui_win32')
-    set guifont=Consolas:h10
-  else
-    set guifont=Menlo:h12
-  endif
-endif
-
 " VIM-PLUG
 " required before run vim-plug
 set nocompatible " Turn off compatible mode.
@@ -96,7 +78,6 @@ Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
 Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
 Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
-Plug 'jayli/vim-easycomplete' " A Fast and Minimalism Style Completion Plugin for vim/nvim.
 Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
 Plug 'honza/vim-snippets' " Snippets library
 
@@ -320,7 +301,8 @@ let &t_EI = "\e[2 q"
 if $TERM =~ '^\(rtmux\|xvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
     " opening vim in non gui available environment
     set notermguicolors
-elseif $TERM =~ '^\(xterm\|vte\|gnome\|alacritty\)\(-.*\)\?$'
+" elseif $TERM =~ '^\(xterm\|vte\|gnome\|alacritty\)\(-.*\)\?$'
+else
     " opening vim in gui available environment
     set termguicolors
 endif
@@ -556,3 +538,23 @@ set softtabstop=4 " These two should have a same value
 set nowrap
 set wildmenu
 set wildoptions=pum
+
+" MACVIM/GVIM
+if has('gui_running')
+  set lines=30 columns=90
+  set t_Co=256
+  colorscheme retrobox
+  if has('gui_gtk2')
+    set guifont=Mocaco:h14
+  elseif has('gui_macvim')
+    set guifont=CaskaydiaCove\ Nerd\ Font\ Mono\:h16
+    set macligatures
+    set macmeta
+    set guioptions+=T
+  elseif has('gui_win32')
+    set guifont=Consolas:h10
+  else
+    set guifont=Menlo:h12
+  endif
+endif
+
