@@ -28,6 +28,8 @@
     " Colorscheme
     " Seoul256
     " Transparent
+    " GVIM/MACVIM
+    " Font
     " Better rainbow parentheses
     " HTML, SQL inside PHP highlighting
 " 3. Mapping :
@@ -80,6 +82,7 @@ Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and st
 Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
 Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
 Plug 'honza/vim-snippets' " Snippets library
+Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
 
 " APPEARANCE
 Plug 'itchyny/lightline.vim' 
@@ -249,7 +252,7 @@ let g:lightline = {
             \   'customCursorPosition': '%l:%c',
             \   'customTime': '%{strftime("%H:%M")}'
             \ }, 
-            \ }
+\ }
 " others : e plugged/lightline.vim/colorscheme.md
 
 " GIT GUTTER
@@ -262,7 +265,7 @@ let g:ale_linters = {
 \} 
 
 " MATCHIT
-if has('syntax') && has('eval')
+if has('syntax') && has('eval') && &filetype == 'html'
     packadd! matchit
 endif
 " To use the matchit plugin after Vim has started, execute this command:
@@ -318,7 +321,7 @@ hi Pmenu ctermbg=DarkGreen
 
 " COLORSCHEME
 set background=dark " you have to put set bg before colo cmd
-colorscheme darkblue
+colorscheme retrobox
 " LIGHT COLOR
 " Blue (but set bg to dark, wkwk)
 " delek 
@@ -366,8 +369,23 @@ colorscheme darkblue
 " let g:seoul256_light_background = 253
 
 " TRANSPARENT
-hi Normal ctermfg=NONE ctermbg=NONE guibg=NONE 
-hi NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
+" GVIM cannot accept transparent background
+if &term == 'win32' || &term == 'xterm-256color'
+  hi Normal ctermfg=NONE ctermbg=NONE guibg=NONE 
+  hi NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
+endif
+
+" MACVIM/GVIM
+" FONT
+if has('gui_macvim')
+  set guifont=Mocaco:h14
+  set lines=30 columns=90
+  set macligatures
+  set macmeta
+  set guioptions+=T
+elseif has('gui_win32')
+  set guifont=CaskaydiaMono\ NFM\:h10
+endif
 
 " BETTER RAINBOW PARENTHESES
 let g:rbpt_colorpaird = [
@@ -530,7 +548,7 @@ set noswapfile
 set nowb
 set number relativenumber
 set secure
-set shiftwidth=4
+set shiftwidth=2
 set softtabstop=4 " These two should have a same value
 " set signcolumn=off
 " set synmaxcol=0 " zero will makes highligthing all line and slow down for
@@ -538,23 +556,3 @@ set softtabstop=4 " These two should have a same value
 set nowrap
 set wildmenu
 set wildoptions=pum
-
-" MACVIM/GVIM
-if has('gui_running')
-  set lines=30 columns=90
-  set t_Co=256
-  colorscheme retrobox
-  if has('gui_gtk2')
-    set guifont=Mocaco:h14
-  elseif has('gui_macvim')
-    set guifont=CaskaydiaCove\ Nerd\ Font\ Mono\:h16
-    set macligatures
-    set macmeta
-    set guioptions+=T
-  elseif has('gui_win32')
-    set guifont=Consolas:h10
-  else
-    set guifont=Menlo:h12
-  endif
-endif
-
