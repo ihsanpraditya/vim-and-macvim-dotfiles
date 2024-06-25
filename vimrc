@@ -62,13 +62,16 @@ call plug#begin('~/.vim/plugged')
 Plug 'mhinz/vim-startify' " welcome page
 Plug 'scrooloose/nerdtree' " file explorer at side bar.
 Plug 'Xuyuanp/nerdtree-git-plugin' " Git symbol at Nerd explorer
+Plug 'tpope/vim-fugitive' " A Git wrapper
+Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'preservim/vim-markdown'
+Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
 
 " EDITING
 Plug 'jiangmiao/auto-pairs' " auto pair bracket, etc
 Plug 'tpope/vim-surround' " Surround shortcut
-Plug 'tpope/vim-fugitive' " A Git wrapper
 Plug 'mattn/emmet-vim' " HTML CSS toolkit
 Plug 'Yggdroot/indentLine' " Show indentation line
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multi cursor
@@ -77,9 +80,8 @@ Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'godlygeek/tabular'
-Plug 'preservim/vim-markdown'
-Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
-Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
+
+" LANGUAGE FEATURE
 Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
 Plug 'honza/vim-snippets' " Snippets library
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
@@ -141,7 +143,7 @@ let g:html_indent_script1        = "inc"
 let g:html_indent_style1         = "inc"
 let g:html_indent_attribute      = 1
 let g:indentLine_enabled         = 0 " 0 for disable, to enable type :IndentLinesEnable
-let g:indentLine_char_list       = ['¦', '┆', '┊']
+let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 let g:indentLine_color_term      = 239
 let g:indentLine_color_gui       = '#A4E57E'
 let g:indentLine_color_tty_light = 7 " (default: 4)
@@ -259,10 +261,17 @@ let g:lightline = {
 " :GitGutterDisable " make the default is disable (illegal setting)
 
 " ALE
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'vim': ['vimls'],
-\} 
+" let g:ale_linters = {
+" \   'javascript': ['eslint'],
+" \   'javascriptreact': ['eslint', 'jsx'],
+" \   'vim': ['vimls'],
+" \} 
+
+" let g:ale_fixers = {
+" \   'javascript': ['eslint'],
+" \   'javascriptreact': ['eslint', 'jsx'],
+" \   'vim': ['vimls'],
+" \} 
 
 " MATCHIT
 if has('syntax') && has('eval') && &filetype == 'html'
@@ -292,10 +301,9 @@ let g:UltiSnipsEditSplit="vertical"
 set rtp+=/usr/local/opt/fzf
 
 " CURSOR
-" set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-"     \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-"     \,sm:block-blinkwait175-blinkoff150-blinkon175
-set cursorline " Highlighting line where a cursor is
+set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+    \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+    \,sm:block-blinkwait175-blinkoff150-blinkon175
 " Cursor shape for insert mode to bar shape
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
@@ -463,14 +471,14 @@ nnoremap <leader>. :lcd %:p:h<CR>
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
 " OPENS A TAB EDIT COMMAND WITH THE PATH OF THE CURRENTLY EDITED FILE FILLED
-noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+" noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 " BUFFER NAV
 noremap <leader>z :bp<CR>
 noremap <leader>x :bn<CR>
 
 " CLOSE BUFFER
-noremap <leader>c :bd<CR>
+noremap <leader>c :bprevious<CR>:bdelete #<CR>
 
 " COMMENT TRIGGER
 noremap <leader>/ :TComment<CR>
@@ -490,9 +498,10 @@ nnoremap <leader>h :Startify<CR>
 
 noremap <F4> :IndentLinesToggle<CR>
 
-nnoremap <Leader>tt :NERDTreeToggle<CR>
+nnoremap <Leader>t :NERDTreeToggle<CR>
 
 nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>r :History<CR>
 
 " ------ END MAPLEADER SHORTCUT
 
@@ -533,7 +542,8 @@ let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 
 set autoindent
 set backspace=indent,eol,start
-set noexpandtab
+set cursorline " Highlighting line where a cursor is
+set encoding=utf-8
 set exrc
 set foldcolumn=1
 set foldlevel=2
@@ -544,15 +554,18 @@ set lazyredraw
 set linebreak
 set mouse=nvi
 set nobackup
+set noexpandtab
 set noswapfile
 set nowb
 set number relativenumber
 set secure
+set scrolloff=8
 set shiftwidth=2
-set softtabstop=4 " These two should have a same value
+set softtabstop=2 " Those two should have a same value
 " set signcolumn=off
 " set synmaxcol=0 " zero will makes highligthing all line and slow down for
+set noexpandtab
 " long line
-set nowrap
+" set nowrap
 set wildmenu
 set wildoptions=pum
