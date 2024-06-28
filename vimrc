@@ -478,7 +478,7 @@ noremap <leader>z :bp<CR>
 noremap <leader>x :bn<CR>
 
 " CLOSE BUFFER
-noremap <leader>c :bprevious<CR>:bdelete #<CR>
+noremap <leader>c :bd<CR>
 
 " COMMENT TRIGGER
 noremap <leader>/ :TComment<CR>
@@ -502,6 +502,8 @@ nnoremap <Leader>t :NERDTreeToggle<CR>
 
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>r :History<CR>
+
+nnoremap <Leader>p :Tabularize /
 
 " ------ END MAPLEADER SHORTCUT
 
@@ -540,6 +542,12 @@ au FocusGained,BufEnter * checktime
 " Use NERDTree bookmarks
 let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 
+" function MyFoldText()
+"     let line = getline(v:foldstart)
+"     let sub = substitute(line, '/\*\|\*/\|{{{\d\=', '', 'g')
+"     return v:folddashes .. sub
+" endfunction
+
 set autoindent
 set backspace=indent,eol,start
 set cursorline " Highlighting line where a cursor is
@@ -547,6 +555,7 @@ set encoding=utf-8
 set exrc
 set foldcolumn=1
 set foldlevel=2
+set foldmethod=indent
 set hlsearch
 set incsearch
 set ignorecase smartcase
