@@ -7,6 +7,7 @@
 " 1. Vim's plugins configuration :
     " Provider (enhancing vim, used by completion)
     " Nerdtree (file explorer)
+    " Startify
     " Indent
     " Visual-multi (selection)
     " Emmet (webdev plugin for highspeed coding and editing)
@@ -15,8 +16,10 @@
     " Markdownpreview
     " Lightline (status bar customization)
     " Git Gutter
+    " Deoplete
     " ALE
     " Matchit
+    " editorconfig
     " Ultisnips
     " FZF VIM
 " 2. Vim's preferences :
@@ -40,6 +43,7 @@
     " Unmap ctrl-z for :stop
     " auto-complete trigger with tab
     " Mapleader
+    " Command
 " 4. Other vim's preferences
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -57,17 +61,19 @@ filetype off " Required Firstly
 
 " running vim-plug
 call plug#begin('~/.vim/plugged')
- 
+
 " APP FEATURE
 Plug 'mhinz/vim-startify' " welcome page
 Plug 'scrooloose/nerdtree' " file explorer at side bar.
 Plug 'Xuyuanp/nerdtree-git-plugin' " Git symbol at Nerd explorer
+Plug 'preservim/tagbar' " displays tags in a window, ordered by scope
 Plug 'tpope/vim-fugitive' " A Git wrapper
 Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'preservim/vim-markdown'
 Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
+Plug 'qpkorr/vim-bufkill' " unload, delete or wipe a buffer without closing the window it was displayed in.
 
 " EDITING
 Plug 'jiangmiao/auto-pairs' " auto pair bracket, etc
@@ -80,23 +86,33 @@ Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'godlygeek/tabular'
+Plug 'ledger/vim-ledger'
 
-" LANGUAGE FEATURE
-Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
-Plug 'honza/vim-snippets' " Snippets library
-Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
 
 " APPEARANCE
-Plug 'itchyny/lightline.vim' 
+Plug 'itchyny/lightline.vim'
 Plug 'altercation/vim-colors-solarized' " theme
 Plug 'tomasr/molokai' " theme
 Plug 'dracula/vim', { 'as': 'dracula' } " theme
 Plug 'NLKNguyen/papercolor-theme' " theme by Goole
 Plug 'safv12/andromeda.vim' " Darktheme from vscode
-Plug 'junegunn/seoul256.vim' "🌳 Low-contrast Vim color scheme based on Seoul Colors 
+Plug 'junegunn/seoul256.vim' "🌳 Low-contrast Vim color scheme based on Seoul Colors
+Plug 'nordtheme/vim'
+
+" LANGUAGE FEATURE
+Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
+Plug 'honza/vim-snippets' " Snippets library
+Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 " LINTER
-Plug 'dense-analysis/ale' " Check syntax in Vim/Neovim asynchronously and fix files, with Language Server Protocol (LSP) 
+Plug 'dense-analysis/ale' " Check syntax in Vim/Neovim asynchronously and fix files, with Language Server Protocol (LSP)
 
 call plug#end()
 
@@ -106,7 +122,6 @@ filetype plugin indent on " You may do, after vim-plug
 """""""""" PLUGINS SETTINGS ********************************
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTREE
-" nnoremap <C-t> :NERDTreeToggle<CR>
 
 " Start NERDTree when Vim starts with a directory argument.
 autocmd StdinReadPre * let s:std_in=1
@@ -128,14 +143,35 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ 'Modified'  :'✹',
     \ 'Staged'    :'✚',
     \ 'Untracked' :'✭',
-    \ 'Renamed'   :'➜', 
-    \ 'Unmerged'  :'═', 
-    \ 'Deleted'   :'✖', 
-    \ 'Dirty'     :'✗', 
-    \ 'Ignored'   :'☒', 
-    \ 'Clean'     :'✔︎', 
+    \ 'Renamed'   :'➜',
+    \ 'Unmerged'  :'═',
+    \ 'Deleted'   :'✖',
+    \ 'Dirty'     :'✗',
+    \ 'Ignored'   :'☒',
+    \ 'Clean'     :'✔︎',
     \ 'Unknown'   :'?', }
 let NERDTreeShowLineNumbers=1
+
+" STARTIFY
+let g:startify_change_to_dir = 1
+let g:startify_session_autoload    = 1
+let g:startify_session_persistence = 1
+let g:startify_bookmarks = [
+            \ { 'c': '~/Sites/akademik-maqiis' },
+            \ '~/Documents/mynotes/Pekerjaan/Almatuq/Maqiis/Laravel.md',
+            \ '~/Documents/mynotes',
+            \ '~/.zshrc',
+            \ '~/.vim/plugged/vim-snippets/UltiSnips/blade.snippets',
+            \ ]
+let g:startify_lists = [
+            \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+            \ { 'type': 'files',     'header': ['   Files']            },
+            \ { 'type': 'dir',       'header': ['   Dir '. getcwd()] },
+            \ { 'type': 'sessions',  'header': ['   Sessions']       },
+            \ { 'type': 'commands',  'header': ['   Commands']       },
+            \ ]
+let g:startify_custom_header =
+            \ startify#fortune#cowsay('', '═','║','╔','╗','╝','╚')
 
 " INDENT
 " set the indent for the first line after <script> and <style>
@@ -160,12 +196,9 @@ let g:VM_mouse_mappings          = 1
 " allow emmet in all mode
 let g:user_emmet_mode = 'a'
 
-" Emmet leader key
-let g:user_emmet_leader_key = '<C-s>'
- 
 " allow emmet for html and css only
 let g:user_emmet_install_global = 0
-autocmd FileType html,css,php EmmetInstall
+autocmd FileType html,css,php,blade EmmetInstall
 
 " Snippet to add meta tag for responsiveness
 let g:user_emmet_settings = {
@@ -244,7 +277,7 @@ let g:lightline = {
             \ 'colorscheme': 'powerline',
             \ 'active': {
                 \    'right': [
-                \ ['customTime'], 
+                \ ['customTime'],
                 \ ['customFileType', 'customCursorPosition'],
                 \ ['customFormatEncode']]
             \ },
@@ -253,25 +286,31 @@ let g:lightline = {
             \   'customFormatEncode': '%{&fenc!=#""?&fenc:&enc}',
             \   'customCursorPosition': '%l:%c',
             \   'customTime': '%{strftime("%H:%M")}'
-            \ }, 
+            \ },
 \ }
 " others : e plugged/lightline.vim/colorscheme.md
 
 " GIT GUTTER
 " :GitGutterDisable " make the default is disable (illegal setting)
 
-" ALE
-" let g:ale_linters = {
-" \   'javascript': ['eslint'],
-" \   'javascriptreact': ['eslint', 'jsx'],
-" \   'vim': ['vimls'],
-" \} 
+" DEOPLETE
+let g:deoplete#enable_at_startup = 1
 
-" let g:ale_fixers = {
-" \   'javascript': ['eslint'],
-" \   'javascriptreact': ['eslint', 'jsx'],
-" \   'vim': ['vimls'],
-" \} 
+" ALE
+let g:ale_linters = {
+\   'java': ['javac'],
+\   'javascript': ['jshint'],
+\   'typescript': ['eslint'],
+\   'vim': ['vimls'],
+\}
+
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'typescript' : ['eslint'],
+\   'php': ['php_cs_fixer'],
+\}
+
+let g:ale_fix_on_save = 1
 
 " MATCHIT
 if has('syntax') && has('eval') && &filetype == 'html'
@@ -281,11 +320,17 @@ endif
 " packadd matchit
 " The default is disabled, so if you feel Vim goes slow then disable matchit.
 
+" EDITORCONFIG
+" Similar to the matchit package.
+if has('syntax') && has('eval')
+    packadd! editorconfig
+endif
+
 " ULTISNIPS
 " Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
 " - https://github.com/Valloric/YouCompleteMe
 " - https://github.com/nvim-lua/completion-nvim
-let g:UltiSnipsExpandTrigger="<Tab>"
+let g:UltiSnipsExpandTrigger="<CR>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 
@@ -320,7 +365,7 @@ endif
 
 " COLORING
 " You can see all the groups currently active with this command: > :so $VIMRUNTIME/syntax/hitest.vim
-" Desc for every menu: > :hi highlight-groups 
+" Desc for every menu: > :hi highlight-groups
 " List available color for Terminal UI (TUI): > :h cterm-colors
 "" Comment text styling
 hi Comment cterm=italic gui=italic ctermfg=DarkGray guifg=Gray
@@ -332,11 +377,11 @@ set background=dark " you have to put set bg before colo cmd
 colorscheme retrobox
 " LIGHT COLOR
 " Blue (but set bg to dark, wkwk)
-" delek 
-" morning(not too light, good for night shift) 
-" peachpuff 
+" delek
+" morning(not too light, good for night shift)
+" peachpuff
 " shine(dont use)
-" zellner 
+" zellner
 """"""""""""""""""""""""""""""
 " DARK COLOR
 " Andromeda
@@ -348,7 +393,7 @@ colorscheme retrobox
 " industry
 " koehler
 " macvim (not too good for gitgutter)
-" murphy
+" murphy (good in dark room)
 " pablo
 " ron
 " slate (looks modern but light)
@@ -359,7 +404,7 @@ colorscheme retrobox
 
 " AMBI COLOR
 " lunaperche
-" PaperColor 
+" PaperColor
 " quiet (no syntax)
 " retrobox
 " solarized
@@ -379,18 +424,17 @@ colorscheme retrobox
 " TRANSPARENT
 " GVIM cannot accept transparent background
 if &term == 'win32' || &term == 'xterm-256color'
-  hi Normal ctermfg=NONE ctermbg=NONE guibg=NONE 
+  hi Normal ctermfg=NONE ctermbg=NONE guibg=NONE
   hi NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
 endif
 
 " MACVIM/GVIM
 " FONT
 if has('gui_macvim')
-  set guifont=Mocaco:h14
+	set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h15
   set lines=30 columns=90
   set macligatures
   set macmeta
-  set guioptions+=T
 elseif has('gui_win32')
   set guifont=CaskaydiaMono\ NFM\:h10
 endif
@@ -423,7 +467,8 @@ au Syntax * RainbowParenthesesLoadBraces
 
 " HTML, SQL INSIDE PHP HIGHLIGHTING
 let php_htmlInStrings = 1
-let php_sql_query=1
+let php_sql_query = 1
+let php_folding = 1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""" MAPPING
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -456,12 +501,14 @@ inoremap jk <Esc>
 " :imap <S-Tab> <C-P>
 
 " MAPLEADER
-" ------ start mapleader shortcut
-let mapleader = " " " With a map leader it's possible to do extra key combinations like <leader>w saves the current file
-" Fast saving
+" ----------- START MAPLEADER SHORTCUT ---------------
+" With a map leader it's possible to do extra key combinations like <leader>w saves the current file
+let mapleader = " "
+
+" FAST SAVING
 nmap <leader>w :w!<CR>
 
-" Fast exit
+" fast exit
 nmap <leader>q :q<CR>
 
 " SET WORKING DIRECTORY
@@ -469,25 +516,27 @@ nnoremap <leader>. :lcd %:p:h<CR>
 
 " OPENS AN EDIT COMMAND WITH THE PATH OF THE CURRENTLY EDITED FILE FILLED IN
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+noremap <Leader>E :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 " OPENS A TAB EDIT COMMAND WITH THE PATH OF THE CURRENTLY EDITED FILE FILLED
 " noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+"
+" TAB NAV
+noremap <leader>a :tabN<CR>
+noremap <leader>s :tabn<CR>
 
 " BUFFER NAV
 noremap <leader>z :bp<CR>
 noremap <leader>x :bn<CR>
 
 " CLOSE BUFFER
-noremap <leader>c :bd<CR>
+" noremap <leader>c :bd<CR> ga tau kenapa malah nutup satu aplikasi
 
 " COMMENT TRIGGER
 noremap <leader>/ :TComment<CR>
 
 " FAST LINE DELETE
 noremap <leader>k dd
-
-" FAST SOURCING
-noremap <leader>s :source<CR>
 
 " Quickly insert an empty new line without entering insert mode
 nnoremap <Leader>o o<Esc>
@@ -499,13 +548,18 @@ nnoremap <leader>h :Startify<CR>
 noremap <F4> :IndentLinesToggle<CR>
 
 nnoremap <Leader>t :NERDTreeToggle<CR>
+nnoremap <Leader>y :NERDTreeFind<CR>
 
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>r :History<CR>
 
-nnoremap <Leader>p :Tabularize /
+nnoremap <Leader>p :Tagbar<CR>
 
-" ------ END MAPLEADER SHORTCUT
+" ----------- END MAPLEADER SHORTCUT ---------------
+
+" COMMAND
+" If you find you do not have permission to perform :w, you can make a command so :W invokes sudo:
+command W w !sudo tee "%" > /dev/null
 
 " redefining emmet key
 let g:user_emmet_leader_key='<C-z>'
@@ -526,14 +580,34 @@ function! TwiddleCase(str)
     return result
 endfunction
 vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
-" With the following (for example, in vimrc), you can visually select text then press ~ to convert the text to UPPER CASE, then to lower case, then to Title Case. Keep pressing ~ until you get the case you 
+" With the following (for example, in vimrc), you can visually select text
+" then press ~ to convert the text to UPPER CASE, then to lower case, then to
+" Title Case. Keep pressing ~ until you get the case you
+
+" Close buffer without closing the window
+function! CloseBuffer()
+	if &modified
+		echohl ErrorMsg
+		echomsg "No write since last change. Not closing buffer."
+		echohl NONE
+	else
+		let s:total_nr_buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+
+		if s:total_nr_buffers == 1
+			bdelete
+			echo "Buffer deleted. Created new buffer."
+		else
+			bprevious
+			bdelete #
+			echo "Buffer deleted."
+		endif
+	endif
+endfunction
+"
 " ------ END MAPPING
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""" OTHER VIM's PREFERENCES
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set to auto read when a file is changed from the outside
-set autoread
-au FocusGained,BufEnter * checktime
 
 " " Create a custom header using figlet for welcome screen
 " let g:startify_custom_header =
@@ -548,33 +622,52 @@ let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
 "     return v:folddashes .. sub
 " endfunction
 
+" Set to auto read when a file is changed from the outside
+set autoread
+au FocusGained,BufEnter * checktime
+
 set autoindent
 set backspace=indent,eol,start
+set cmdheight=1
 set cursorline " Highlighting line where a cursor is
 set encoding=utf-8
 set exrc
 set foldcolumn=1
 set foldlevel=2
 set foldmethod=indent
+set guioptions-=T
+set guioptions-=r
+set guioptions-=R
+set guioptions-=l
+set guioptions-=L
 set hlsearch
+set history=500
 set incsearch
 set ignorecase smartcase
 set lazyredraw
 set linebreak
+set magic
 set mouse=nvi
 set nobackup
 set noexpandtab
 set noswapfile
 set nowb
+set nowrap
 set number relativenumber
-set secure
+set regexpengine=0
 set scrolloff=8
-set shiftwidth=2
-set softtabstop=2 " Those two should have a same value
-" set signcolumn=off
+set secure
+set showmatch
+set smartindent
+set matchtime=2
+set shiftwidth=4
+set tabstop=4
+set textwidth=80
 " set synmaxcol=0 " zero will makes highligthing all line and slow down for
 set noexpandtab
-" long line
-" set nowrap
 set wildmenu
 set wildoptions=pum
+syntax enable
+
+" Return to last edit position when opening files (You want this!)
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
