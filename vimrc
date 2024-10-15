@@ -1,8 +1,5 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""""""""""""""""""" INDEX """""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Frequently Visited References
-" Macvim Conf
+" INDEX ------------------------------ {{{
+
 " VIM-PLUG (Minimalist VIM plugin manager)
 " 1. Vim's plugins configuration :
     " Provider (enhancing vim, used by completion)
@@ -45,24 +42,19 @@
     " Mapleader
     " Command
 " 4. Other vim's preferences
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""""""""""""""""""" INDEX """""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" FREQUENTLY VISITED REFERENCES
 "
+" }}}
 
-" VIM-PLUG
-" required before run vim-plug
+" VIM-PLUG ------------------------------ {{{
+" required before run vim-plug -------------------- {{{
 set nocompatible " Turn off compatible mode.
 set nomodeline " Turn off modeline support.
 filetype off " Required Firstly
 
-" running vim-plug
 call plug#begin('~/.vim/plugged')
+" }}}
 
-" APP FEATURE
+" APP FEATURE -------------------- {{{
 Plug 'mhinz/vim-startify' " welcome page
 Plug 'scrooloose/nerdtree' " file explorer at side bar.
 Plug 'Xuyuanp/nerdtree-git-plugin' " Git symbol at Nerd explorer
@@ -74,8 +66,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'preservim/vim-markdown'
 Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
 Plug 'qpkorr/vim-bufkill' " unload, delete or wipe a buffer without closing the window it was displayed in.
+" }}}
 
-" EDITING
+" EDITING -------------------- {{{
 Plug 'jiangmiao/auto-pairs' " auto pair bracket, etc
 Plug 'tpope/vim-surround' " Surround shortcut
 Plug 'mattn/emmet-vim' " HTML CSS toolkit
@@ -87,9 +80,9 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'godlygeek/tabular'
 Plug 'ledger/vim-ledger'
+" }}}
 
-
-" APPEARANCE
+" APPEARANCE -------------------- {{{
 Plug 'itchyny/lightline.vim'
 Plug 'altercation/vim-colors-solarized' " theme
 Plug 'tomasr/molokai' " theme
@@ -98,8 +91,9 @@ Plug 'NLKNguyen/papercolor-theme' " theme by Goole
 Plug 'safv12/andromeda.vim' " Darktheme from vscode
 Plug 'junegunn/seoul256.vim' "🌳 Low-contrast Vim color scheme based on Seoul Colors
 Plug 'nordtheme/vim'
+" }}}
 
-" LANGUAGE FEATURE
+" LANGUAGE FEATURE -------------------- {{{
 Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
 Plug 'honza/vim-snippets' " Snippets library
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
@@ -110,18 +104,22 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
+" }}}
 
-" LINTER
+" LINTER -------------------- {{{
 Plug 'dense-analysis/ale' " Check syntax in Vim/Neovim asynchronously and fix files, with Language Server Protocol (LSP)
+" }}}
 
+" You may do, after vim-plug -------------------- {{{
 call plug#end()
+filetype plugin indent on
+syntax enable
+" }}}
 
-filetype plugin indent on " You may do, after vim-plug
+" }}}
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" PLUGINS SETTINGS ********************************
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NERDTREE
+" PLUGINS ------------------------------ {{{
+" NERDTREE -------------------- {{{
 
 " Start NERDTree when Vim starts with a directory argument.
 autocmd StdinReadPre * let s:std_in=1
@@ -152,7 +150,15 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ 'Unknown'   :'?', }
 let NERDTreeShowLineNumbers=1
 
-" STARTIFY
+" Use NERDTree bookmarks
+let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
+" " Create a custom header using figlet for welcome screen
+" let g:startify_custom_header =
+"             \ startify#pad(split(system('figlet -c VIM 2022'), '\n'))
+
+" }}}
+
+" STARTIFY -------------------- {{{
 let g:startify_change_to_dir = 1
 let g:startify_session_autoload    = 1
 let g:startify_session_persistence = 1
@@ -172,8 +178,9 @@ let g:startify_lists = [
             \ ]
 let g:startify_custom_header =
             \ startify#fortune#cowsay('', '═','║','╔','╗','╝','╚')
+" }}}
 
-" INDENT
+" INDENT -------------------- {{{
 " set the indent for the first line after <script> and <style>
 let g:html_indent_script1        = "inc"
 let g:html_indent_style1         = "inc"
@@ -184,15 +191,17 @@ let g:indentLine_color_term      = 239
 let g:indentLine_color_gui       = '#A4E57E'
 let g:indentLine_color_tty_light = 7 " (default: 4)
 let g:indentLine_color_dark      = 1 " (default: 2)
+" }}}
 
-" VISUAL-MULTI
+" VISUAL-MULTI -------------------- {{{
 let g:VM_maps                    = {}
 let g:VM_maps["Add Cursor Up"]   = '<C-k>'
 let g:VM_maps["Add Cursor Down"] = '<C-j>'
 let g:VM_maps["Exit"]            = '<C-c>'
 let g:VM_mouse_mappings          = 1
+" }}}
 
-" EMMET
+" EMMET -------------------- {{{
 " allow emmet in all mode
 let g:user_emmet_mode = 'a'
 
@@ -222,15 +231,17 @@ let g:user_emmet_settings = {
 \    },
 \  },
 \}
+" }}}
 
-" TEX-CONCEAL
+" TEX-CONCEAL -------------------- {{{
 set conceallevel=2
 let g:tex_conceal_frac = 1
 let g:tex_superscripts = "[0-9a-zA-W.,:;+-<>/()          = ]"
 let g:tex_subscripts   = "[0-9aehijklmnoprstuvx,+-/().]"
 let g:tex_conceal      = 'abdgm'
+" }}}
 
-" MARKDOWNPREVIEW
+" MARKDOWNPREVIEW -------------------- {{{
 let g:mkdp_auto_start         = 0
 let g:mkdp_auto_close         = 1
 let g:mkdp_refresh_slow       = 0
@@ -269,8 +280,9 @@ let g:vim_markdown_autowrite            = 1
 let g:vim_markdown_auto_insert_bullets  = 1 " turning it on can cause problem when wrapping
 let g:vim_markdown_new_list_item_indent = 0
 let g:vim_markdown_edit_url_in          = 'tab'
+" }}}
 
-"LIGHTLINE
+" LIGHTLINE -------------------- {{{
 set laststatus=2
 set noshowmode " hide default statusline
 let g:lightline = {
@@ -289,44 +301,52 @@ let g:lightline = {
             \ },
 \ }
 " others : e plugged/lightline.vim/colorscheme.md
+" }}}
 
-" GIT GUTTER
+" GIT GUTTER -------------------- {{{
 " :GitGutterDisable " make the default is disable (illegal setting)
+" }}}
 
-" DEOPLETE
+" DEOPLETE -------------------- {{{
 let g:deoplete#enable_at_startup = 1
+" }}}
 
-" ALE
+" ALE -------------------- {{{
 let g:ale_linters = {
 \   'java': ['javac'],
 \   'javascript': ['jshint'],
+\   'markdown': ['markdownlint'],
 \   'typescript': ['eslint'],
 \   'vim': ['vimls'],
 \}
 
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'markdown' : ['prettier'],
 \   'typescript' : ['eslint'],
 \   'php': ['php_cs_fixer'],
 \}
 
 let g:ale_fix_on_save = 1
+" }}}
 
-" MATCHIT
+" MATCHIT -------------------- {{{
 if has('syntax') && has('eval') && &filetype == 'html'
     packadd! matchit
 endif
 " To use the matchit plugin after Vim has started, execute this command:
 " packadd matchit
 " The default is disabled, so if you feel Vim goes slow then disable matchit.
+" }}}
 
-" EDITORCONFIG
+" EDITORCONFIG -------------------- {{{
 " Similar to the matchit package.
 if has('syntax') && has('eval')
     packadd! editorconfig
 endif
+" }}}
 
-" ULTISNIPS
+" ULTISNIPS -------------------- {{{
 " Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
 " - https://github.com/Valloric/YouCompleteMe
 " - https://github.com/nvim-lua/completion-nvim
@@ -336,24 +356,26 @@ let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+" }}}
 
-" FZF VIM
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" PREFERENCES """""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" FZF SEARCH
+" FZF VIM -------------------- {{{
 set rtp+=/usr/local/opt/fzf
+" }}}
 
-" CURSOR
+" }}}
+
+" PREFERENCES ------------------------------ {{{
+
+" CURSOR -------------------- {{{
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
     \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
     \,sm:block-blinkwait175-blinkoff150-blinkon175
 " Cursor shape for insert mode to bar shape
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
+" }}}
 
-" TERMINAL SETTING
+" TERMINAL SETTING -------------------- {{{
 if $TERM =~ '^\(rtmux\|xvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
     " opening vim in non gui available environment
     set notermguicolors
@@ -362,8 +384,9 @@ else
     " opening vim in gui available environment
     set termguicolors
 endif
+" }}}
 
-" COLORING
+" COLORING -------------------- {{{
 " You can see all the groups currently active with this command: > :so $VIMRUNTIME/syntax/hitest.vim
 " Desc for every menu: > :hi highlight-groups
 " List available color for Terminal UI (TUI): > :h cterm-colors
@@ -420,16 +443,17 @@ colorscheme retrobox
 "   range:   252 (darkest) ~ 256 (lightest)
 "   default: 253
 " let g:seoul256_light_background = 253
+" }}}
 
-" TRANSPARENT
+" TRANSPARENT -------------------- {{{
 " GVIM cannot accept transparent background
 if &term == 'win32' || &term == 'xterm-256color'
   hi Normal ctermfg=NONE ctermbg=NONE guibg=NONE
   hi NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
 endif
+" }}}
 
-" MACVIM/GVIM
-" FONT
+" MACVIM/GVIM FONT -------------------- {{{
 if has('gui_macvim')
 	set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h15
   set lines=30 columns=90
@@ -438,8 +462,9 @@ if has('gui_macvim')
 elseif has('gui_win32')
   set guifont=CaskaydiaMono\ NFM\:h10
 endif
+" }}}
 
-" BETTER RAINBOW PARENTHESES
+" BETTER RAINBOW PARENTHESES -------------------- {{{
 let g:rbpt_colorpaird = [
     \ ['brown',       'RoyalBlue3'],
     \ ['Darkblue',    'SeaGreen3'],
@@ -464,44 +489,53 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+" }}}
 
-" HTML, SQL INSIDE PHP HIGHLIGHTING
+" HTML, SQL INSIDE PHP HIGHLIGHTING -------------------- {{{
 let php_htmlInStrings = 1
 let php_sql_query = 1
 let php_folding = 1
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" MAPPING
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" TAB
+" }}}
+
+" }}}
+
+" MAPPING ------------------------------ {{{
+
+" TAB -------------------- {{{
 " nnoremap <Tab> gt
 " nnoremap <S-Tab> gT
 " nnoremap <silent> <S-t> :tabnew<CR>
+" }}}
 
-" MAP CLEARING HIGHLIGHTING AFTER SEARCHING TO <ESC>
+" MAP CLEARING HIGHLIGHTING AFTER SEARCHING TO <ESC >-------------------- {{{
 map <esc> :noh <CR> " Clearing highlight after searching every you click <esc>
+" }}}
 
-" SCROLLING IN INSERT MODE
+" SCROLLING IN INSERT MODE -------------------- {{{
 :inoremap <C-E> <C-X><C-E>
 :inoremap <C-Y> <C-X><C-Y>
+" }}}
 
-" SCROLLING FOR OTHER SPLIT WINDOWS (JUST 2 WINDOWS)
+" SCROLLING FOR OTHER SPLIT WINDOWS (JUST 2 WINDOWS )-------------------- {{{
 nmap <M-j> <c-w>w<c-e><c-w>wh " Scroll down one line other pane
 nmap <M-k> <c-w>w<c-y><c-w>wh " Scroll up one line other pane
 nmap <M-d> <c-w>w<c-d><c-w>wh " Scroll down half screen other pane
 nmap <M-u> <c-w>w<c-u><c-w>wh " Scroll up half screen  other pane
 nmap <M-f> <c-w>w<c-f><c-w>wh " Scroll down one screen other pane
 nmap <M-b> <c-w>w<c-b><c-w>wh " Scroll up one screen other pane
+" }}}
 
-" UNMAP CTRL-Z FOR :STOP then for save
+" UNMAP CTRL-Z FOR :STOP then for save -------------------- {{{
 " map <C-z> :w<CR> " now it's used by Emmet leader key
 inoremap jk <Esc>
+" }}}
 
-" AUTO-COMPLETE TRIGGER WITH TAB
+" AUTO-COMPLETE TRIGGER WITH TAB -------------------- {{{
 " :imap <Tab> <C-X><C-V>
 " :imap <S-Tab> <C-P>
+" }}}
 
-" MAPLEADER
-" ----------- START MAPLEADER SHORTCUT ---------------
+" MAPLEADER -------------------- {{{
 " With a map leader it's possible to do extra key combinations like <leader>w saves the current file
 let mapleader = " "
 
@@ -554,10 +588,9 @@ nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>r :History<CR>
 
 nnoremap <Leader>p :Tagbar<CR>
+" }}}
 
-" ----------- END MAPLEADER SHORTCUT ---------------
-
-" COMMAND
+" COMMAND -------------------- {{{
 " If you find you do not have permission to perform :w, you can make a command so :W invokes sudo:
 command W w !sudo tee "%" > /dev/null
 
@@ -603,36 +636,47 @@ function! CloseBuffer()
 		endif
 	endif
 endfunction
-"
-" ------ END MAPPING
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""" OTHER VIM's PREFERENCES
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" " Create a custom header using figlet for welcome screen
-" let g:startify_custom_header =
-"             \ startify#pad(split(system('figlet -c VIM 2022'), '\n'))
+" CODE FOLDING
+" This will enable code folding.
+" Use the marker method of folding.
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+augroup END
 
-" Use NERDTree bookmarks
-let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
+" If the current file type is HTML/Blade, set indentation to 2 spaces.
+autocmd Filetype html,css,js,blade setlocal tabstop=2 shiftwidth=2 expandtab
 
-" function MyFoldText()
-"     let line = getline(v:foldstart)
-"     let sub = substitute(line, '/\*\|\*/\|{{{\d\=', '', 'g')
-"     return v:folddashes .. sub
-" endfunction
+" Return to last edit position when opening files (You want this!)
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" You can split a window into sections by typing `:split` or `:vsplit`.
+" Display cursorline and cursorcolumn ONLY in active window.
+augroup cursor_off
+    autocmd!
+    autocmd WinLeave * set nocursorline nocursorcolumn
+    autocmd WinEnter * set cursorline cursorcolumn
+augroup END
 
 " Set to auto read when a file is changed from the outside
 set autoread
 au FocusGained,BufEnter * checktime
 
+" }}}
+
+" }}}
+
+" OTHER VIM's PREFERENCES ------------------------------ {{{
+
+" GLOBAL SETTING -------------------- {{{
 set autoindent
 set backspace=indent,eol,start
 set cmdheight=1
 set cursorline " Highlighting line where a cursor is
 set encoding=utf-8
 set exrc
-set foldcolumn=1
+set foldcolumn=2
 set foldlevel=2
 set foldmethod=indent
 set guioptions-=T
@@ -640,8 +684,8 @@ set guioptions-=r
 set guioptions-=R
 set guioptions-=l
 set guioptions-=L
-set hlsearch
-set history=500
+set hlsearch " Use highlighting when doing a search.
+set history=50
 set incsearch
 set ignorecase smartcase
 set lazyredraw
@@ -657,7 +701,8 @@ set number relativenumber
 set regexpengine=0
 set scrolloff=8
 set secure
-set showmatch
+set showcmd " Show partial command you type in the last line of the screen.
+set showmatch " Show matching words during a search.
 set smartindent
 set matchtime=2
 set shiftwidth=4
@@ -665,9 +710,13 @@ set tabstop=4
 set textwidth=80
 " set synmaxcol=0 " zero will makes highligthing all line and slow down for
 set noexpandtab
-set wildmenu
-set wildoptions=pum
-syntax enable
+" }}}
 
-" Return to last edit position when opening files (You want this!)
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+" AUTO COMPLETION -------------------- {{{
+set wildmenu " Enable auto completion menu after pressing TAB.
+set wildmode=list:longest " Make wildmenu behave like similar to Bash completion.
+set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+set wildoptions=pum
+" }}}
+
+" }}}
