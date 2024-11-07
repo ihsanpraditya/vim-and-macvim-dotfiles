@@ -7,13 +7,14 @@
     " Startify
     " Indent
     " Visual-multi (selection)
+    " AutoPairs
     " Emmet (webdev plugin for highspeed coding and editing)
+    " closetag (auto close html tag)
     " Vimtex (vim plugin for latex)
     " Tex-conceal (latex syntax rendering appearance inside code editor)
     " Markdownpreview
     " Lightline (status bar customization)
     " Git Gutter
-    " Deoplete
     " ALE
     " Matchit
     " editorconfig
@@ -27,6 +28,7 @@
     " Coloring
     " Colorscheme
     " Seoul256
+    " Everforest
     " Transparent
     " GVIM/MACVIM
     " Font
@@ -48,6 +50,7 @@
 " VIM-PLUG ------------------------------ {{{
 " required before run vim-plug -------------------- {{{
 set nocompatible " Turn off compatible mode.
+" should set nocompatible for shiftwidth and fugitive plugin.
 set nomodeline " Turn off modeline support.
 filetype off " Required Firstly
 
@@ -66,12 +69,14 @@ Plug 'junegunn/fzf.vim'
 Plug 'preservim/vim-markdown'
 Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
 Plug 'qpkorr/vim-bufkill' " unload, delete or wipe a buffer without closing the window it was displayed in.
+Plug 'ervandew/supertab' " Perform all your vim insert mode completions with Tab
 " }}}
 
 " EDITING -------------------- {{{
 Plug 'jiangmiao/auto-pairs' " auto pair bracket, etc
 Plug 'tpope/vim-surround' " Surround shortcut
 Plug 'mattn/emmet-vim' " HTML CSS toolkit
+Plug 'alvan/vim-closetag' " for HTML
 Plug 'Yggdroot/indentLine' " Show indentation line
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multi cursor
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
@@ -91,19 +96,13 @@ Plug 'NLKNguyen/papercolor-theme' " theme by Goole
 Plug 'safv12/andromeda.vim' " Darktheme from vscode
 Plug 'junegunn/seoul256.vim' "🌳 Low-contrast Vim color scheme based on Seoul Colors
 Plug 'nordtheme/vim'
+Plug 'sainnhe/everforest'
 " }}}
 
 " LANGUAGE FEATURE -------------------- {{{
 Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
 Plug 'honza/vim-snippets' " Snippets library
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
 " }}}
 
 " LINTER -------------------- {{{
@@ -201,6 +200,11 @@ let g:VM_maps["Exit"]            = '<C-c>'
 let g:VM_mouse_mappings          = 1
 " }}}
 
+" AUTOPAIRS ---------- {{{
+" let g:AutoPairsShortcutToggle = '<M-p>'
+" let g:AutoPairsShortcutJump = '<M-n>'
+" }}}
+
 " EMMET -------------------- {{{
 " allow emmet in all mode
 let g:user_emmet_mode = 'a'
@@ -231,6 +235,46 @@ let g:user_emmet_settings = {
 \    },
 \  },
 \}
+" }}}
+
+" AUTO CLOSETAG ---------- {{{
+" filenames like *.xml, *.html, *.xhtml, ...
+" These are the file extensions where this plugin is enabled.
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.blade.php'
+
+" filenames like *.xml, *.xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+
+" filetypes like xml, html, xhtml, ...
+" These are the file types where this plugin is enabled.
+let g:closetag_filetypes = 'html,xhtml,phtml,blade'
+
+" filetypes like xml, xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+let g:closetag_xhtml_filetypes = 'xhtml,jsx'
+
+" integer value [0|1]
+" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
+let g:closetag_emptyTags_caseSensitive = 1
+
+" DICT
+" Disables auto-close if not in a "valid" region (based on filetype)
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+    \ 'javascript.jsx': 'jsxRegion',
+    \ 'typescriptreact': 'jsxRegion,tsxRegion',
+    \ 'javascriptreact': 'jsxRegion',
+    \ }
+
+" Shortcut for closing tags, default is '>'
+let g:closetag_shortcut = '>'
+
+" Add > at current position without closing the current tag, default is ''
+let g:closetag_close_shortcut = '<F4>'
+
+" Enables closing tags for React fragments -> <></> for all supported file types
+let g:closetag_enable_react_fragment = 1
 " }}}
 
 " TEX-CONCEAL -------------------- {{{
@@ -305,10 +349,22 @@ let g:lightline = {
 
 " GIT GUTTER -------------------- {{{
 " :GitGutterDisable " make the default is disable (illegal setting)
-" }}}
-
-" DEOPLETE -------------------- {{{
-let g:deoplete#enable_at_startup = 1
+" nmap <leader>hp <Plug>(GitGutterPreviewHunk)
+" nmap <leader>hs <Plug>(GitGutterStageHunk)
+" nmap <leader>hu <Plug>(GitGutterUndoHunk)
+" nmap [c <Plug>(GitGutterPrevHunk)
+" nmap ]c <Plug>(GitGutterNextHunk)
+" let g:gitgutter_sign_added              = '+'
+" let g:gitgutter_sign_modified           = '~'
+" let g:gitgutter_sign_removed            = '_'
+" let g:gitgutter_sign_removed_first_line = '‾'
+" let g:gitgutter_sign_removed_above_and_below = '_¯'
+" let g:gitgutter_sign_modified_removed   = '~_'
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+set statusline+=%{GitStatus()}
 " }}}
 
 " ALE -------------------- {{{
@@ -316,6 +372,7 @@ let g:ale_linters = {
 \   'java': ['javac'],
 \   'javascript': ['jshint'],
 \   'markdown': ['markdownlint'],
+\   'php': ['phpcs'],
 \   'typescript': ['eslint'],
 \   'vim': ['vimls'],
 \}
@@ -324,7 +381,7 @@ let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'markdown' : ['prettier'],
 \   'typescript' : ['eslint'],
-\   'php': ['php_cs_fixer'],
+\   'php': ['php_cs_fixer', 'phpcbf'],
 \}
 
 let g:ale_fix_on_save = 1
@@ -353,9 +410,8 @@ endif
 let g:UltiSnipsExpandTrigger="<CR>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
+autocmd Filetype blade UltiSnipsAddFiletypes blade.html
+" let g:UltiSnipsEditSplit="normal"
 " }}}
 
 " FZF VIM -------------------- {{{
@@ -384,6 +440,10 @@ else
     " opening vim in gui available environment
     set termguicolors
 endif
+
+" if has('termguicolors')
+"   set termguicolors
+" endif
 " }}}
 
 " COLORING -------------------- {{{
@@ -407,7 +467,7 @@ colorscheme retrobox
 " zellner
 """"""""""""""""""""""""""""""
 " DARK COLOR
-" Andromeda
+" Andromeda (not too good)
 " DarkBlue
 " desert
 " elflord
@@ -415,7 +475,6 @@ colorscheme retrobox
 " habamax
 " industry
 " koehler
-" macvim (not too good for gitgutter)
 " murphy (good in dark room)
 " pablo
 " ron
@@ -427,6 +486,7 @@ colorscheme retrobox
 
 " AMBI COLOR
 " lunaperche
+" macvim (dark mode not too good for gitgutter)
 " PaperColor
 " quiet (no syntax)
 " retrobox
@@ -443,6 +503,24 @@ colorscheme retrobox
 "   range:   252 (darkest) ~ 256 (lightest)
 "   default: 253
 " let g:seoul256_light_background = 253
+
+" EVERFOREST --------------- {{{
+let g:everforest_background = 'soft'
+" Available values: 'hard', 'medium'(default), 'soft'
+let g:everforest_better_performance = 1
+" For better performance
+
+if &term =~ '\(xterm\)'
+  let g:everforest_enable_italic = 1
+  let g:everforest_disable_italic_comment = 1
+endif
+
+augroup everforest_setting
+  autocmd!
+  autocmd Colorscheme everforest
+              \ | highlight Statement cterm=NONE
+              \ | highlight PreProc cterm=NONE
+augroup END
 " }}}
 
 " TRANSPARENT -------------------- {{{
@@ -456,7 +534,7 @@ endif
 " MACVIM/GVIM FONT -------------------- {{{
 if has('gui_macvim')
 	set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h15
-  set lines=30 columns=90
+  " set lines=30 columns=90
   set macligatures
   set macmeta
 elseif has('gui_win32')
@@ -601,7 +679,7 @@ let g:user_emmet_leader_key='<C-z>'
 call togglebg#map("<F5>")
 " nnoremap <F5> :let &bg=(&bg=='light'?'dark':'light')<cr>
 
-" Twidle Case
+" Twidle Case {{{
 function! TwiddleCase(str)
     if a:str ==# toupper(a:str)
         let result = tolower(a:str)
@@ -616,8 +694,9 @@ vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
 " With the following (for example, in vimrc), you can visually select text
 " then press ~ to convert the text to UPPER CASE, then to lower case, then to
 " Title Case. Keep pressing ~ until you get the case you
+" }}}
 
-" Close buffer without closing the window
+" Close buffer without closing the window {{{
 function! CloseBuffer()
 	if &modified
 		echohl ErrorMsg
@@ -636,6 +715,7 @@ function! CloseBuffer()
 		endif
 	endif
 endfunction
+" }}}
 
 " CODE FOLDING
 " This will enable code folding.
@@ -645,23 +725,23 @@ augroup filetype_vim
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
 
-" If the current file type is HTML/Blade, set indentation to 2 spaces.
-autocmd Filetype html,css,js,blade setlocal tabstop=2 shiftwidth=2 expandtab
+" If the current file type is HTML/Blade, set indentation to 4 spaces.
+autocmd Filetype html,css,js,blade setlocal tabstop=4 shiftwidth=4 expandtab foldmethod=indent
 
 " Return to last edit position when opening files (You want this!)
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 " You can split a window into sections by typing `:split` or `:vsplit`.
 " Display cursorline and cursorcolumn ONLY in active window.
 augroup cursor_off
     autocmd!
     autocmd WinLeave * set nocursorline nocursorcolumn
-    autocmd WinEnter * set cursorline cursorcolumn
+    autocmd WinEnter * set cursorline nocursorcolumn
 augroup END
 
 " Set to auto read when a file is changed from the outside
 set autoread
-au FocusGained,BufEnter * checktime
+autocmd FocusGained,BufEnter * checktime
 
 " }}}
 
@@ -670,6 +750,8 @@ au FocusGained,BufEnter * checktime
 " OTHER VIM's PREFERENCES ------------------------------ {{{
 
 " GLOBAL SETTING -------------------- {{{
+" set lines=9999
+" set columns=999
 set autoindent
 set backspace=indent,eol,start
 set cmdheight=1
@@ -679,44 +761,58 @@ set exrc
 set foldcolumn=2
 set foldlevel=2
 set foldmethod=indent
+set history=50
+set lazyredraw
+set linebreak
+set mouse=nvi
+set nobackup
+set noswapfile
+set nowb
+set nowrap
+set number relativenumber
+set scrolloff=8
+set secure
+set showcmd " Show partial command you type in the last line of the screen.
+set smartindent
+set textwidth=80
+" set synmaxcol=0 " zero will makes highligthing all line and slow down for
+" }}}
+
+" INDENT {{{
+set shiftwidth=0
+set tabstop=2
+set expandtab
+" }}}
+
+" SEARCHING {{{
+set hlsearch " Use highlighting when doing a search.
+set incsearch
+set ignorecase smartcase
+set magic
+set matchtime=2
+set regexpengine=0
+set showmatch " Show matching words during a search.
+" }}}
+
+" AUTO COMPLETION -------------------- {{{
+if has("autocmd") && exists("+omnifunc")
+  autocmd Filetype *
+        \ if &omnifunc == "" |
+        \ setlocal omnifunc=syntaxcomplete#Complete |
+        \ endif
+endif
+set wildmenu " Enable auto completion menu after pressing TAB.
+set wildmode=full
+set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+set wildoptions=pum
+" }}}
+
+" GUI OPTIONS {{{
 set guioptions-=T
 set guioptions-=r
 set guioptions-=R
 set guioptions-=l
 set guioptions-=L
-set hlsearch " Use highlighting when doing a search.
-set history=50
-set incsearch
-set ignorecase smartcase
-set lazyredraw
-set linebreak
-set magic
-set mouse=nvi
-set nobackup
-set noexpandtab
-set noswapfile
-set nowb
-set nowrap
-set number relativenumber
-set regexpengine=0
-set scrolloff=8
-set secure
-set showcmd " Show partial command you type in the last line of the screen.
-set showmatch " Show matching words during a search.
-set smartindent
-set matchtime=2
-set shiftwidth=4
-set tabstop=4
-set textwidth=80
-" set synmaxcol=0 " zero will makes highligthing all line and slow down for
-set noexpandtab
-" }}}
-
-" AUTO COMPLETION -------------------- {{{
-set wildmenu " Enable auto completion menu after pressing TAB.
-set wildmode=list:longest " Make wildmenu behave like similar to Bash completion.
-set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
-set wildoptions=pum
 " }}}
 
 " }}}
