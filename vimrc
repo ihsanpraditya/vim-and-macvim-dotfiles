@@ -40,6 +40,7 @@
     " Scrolling in insert mode
     " Scrolling for other split windows (just 2 windows)
     " Unmap ctrl-z for :stop
+    " Mapping K Keywordprg
     " auto-complete trigger with tab
     " Mapleader
     " Command
@@ -606,6 +607,12 @@ nmap <M-b> <c-w>w<c-b><c-w>wh " Scroll up one screen other pane
 " UNMAP CTRL-Z FOR :STOP then for save -------------------- {{{
 " map <C-z> :w<CR> " now it's used by Emmet leader key
 inoremap jk <Esc>
+" }}}
+
+" MAPPING K KEYWORDPRG ----------------------------------- {{{
+" K (capital k) used to go to variable/function definition
+" Instead of :help (default)
+set keywordprg=:tag
 " }}}
 
 " AUTO-COMPLETE TRIGGER WITH TAB -------------------- {{{
