@@ -45,6 +45,7 @@
     " auto-complete trigger with tab
     " Mapleader
     " Command
+    " Based file type settings
 " 4. Other vim's preferences
 "
 " }}}
@@ -90,6 +91,7 @@ Plug 'mattn/emmet-vim' " HTML CSS toolkit
 Plug 'Yggdroot/indentLine' " Show indentation line
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multi cursor
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'lervag/vimtex', { 'tag': 'v2.15' }
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'tomtom/tcomment_vim'
@@ -228,7 +230,7 @@ let g:user_emmet_mode = 'a'
 
 " allow emmet for html and css only
 let g:user_emmet_install_global = 0
-autocmd FileType html,css,php,blade EmmetInstall
+autocmd FileType html,css,php,blade,vue EmmetInstall
 
 " Snippet to add meta tag for responsiveness
 let g:user_emmet_settings = {
@@ -292,6 +294,13 @@ let g:user_emmet_settings = {
 "
 " " Enables closing tags for React fragments -> <></> for all supported file types
 " let g:closetag_enable_react_fragment = 1
+" }}}
+
+" VIMTEX -------------------- {{{
+" let g:vimtex_complete_enabled = 0
+let g:vimtex_include_search_enabled = 0
+" let g:vimtex_view_method = 'open'
+let g:vimtex_compiler_method = 'latexrun'
 " }}}
 
 " TEX-CONCEAL -------------------- {{{
@@ -461,7 +470,7 @@ let &t_EI = "\e[2 q"
 " }}}
 
 " TERMINAL SETTING -------------------- {{{
-if $TERM =~ '^\(rtmux\|xvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
+if $TERM =~ '^\(xterm\|rtmux\|xvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
     " opening vim in non gui available environment
     set notermguicolors
 " elseif $TERM =~ '^\(xterm\|vte\|gnome\|alacritty\)\(-.*\)\?$'
@@ -620,7 +629,7 @@ let php_folding = 1
 " }}}
 
 " MAP CLEARING HIGHLIGHTING AFTER SEARCHING TO <ESC >-------------------- {{{
-map <esc> :noh <CR> " Clearing highlight after searching every you click <esc>
+map <esc> :noh <CR>
 " }}}
 
 " SCROLLING IN INSERT MODE -------------------- {{{
@@ -757,14 +766,19 @@ function! CloseBuffer()
 	endif
 endfunction
 " }}}
+" }}}
 
-" CODE FOLDING
-" This will enable code folding.
-" Use the marker method of folding.
+" Based FILE TYPE Setting ---------------------- {{{
+
+" VIM file
+" This will enable code folding. Use the marker method of folding.
 augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
+
+" If the current file type is latex
+autocmd Filetype tex setlocal textwidth=0
 
 " If the current file type is HTML/Blade, set indentation to 4 spaces.
 autocmd Filetype html,css,js,php,blade setlocal tabstop=4 shiftwidth=4 expandtab foldmethod=indent
