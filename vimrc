@@ -20,6 +20,7 @@
     " editorconfig
     " Ultisnips
     " FZF VIM
+    " Ledger
 " 2. Vim's preferences :
     " Fzf search
     " Background switch button
@@ -48,6 +49,12 @@
 "
 " }}}
 
+" Built-in Package Manager -------------------- {{{
+" I'm going to transform using built-in package manager
+" some packages that loaded optional by it are:
+" 1. Dadbod: Modern database interface for Vim
+" 2. Abolish: Work with several variants of a word at once
+" }}}
 " VIM-PLUG ------------------------------ {{{
 " required before run vim-plug -------------------- {{{
 set nocompatible " Turn off compatible mode.
@@ -70,14 +77,16 @@ Plug 'junegunn/fzf.vim'
 Plug 'preservim/vim-markdown'
 Plug 'gcmt/taboo.vim' " Few utilities for pretty tabs.
 Plug 'qpkorr/vim-bufkill' " unload, delete or wipe a buffer without closing the window it was displayed in.
-Plug 'ervandew/supertab' " Perform all your vim insert mode completions with Tab
+" Plug 'ervandew/supertab' " Perform all your vim insert mode completions with Tab
+Plug 'wolandark/vim-live-server'
+" Plug 'ycm-core/YouCompleteMe' " Completion engine
 " }}}
 
 " EDITING -------------------- {{{
 Plug 'jiangmiao/auto-pairs' " auto pair bracket, etc
 Plug 'tpope/vim-surround' " Surround shortcut
 Plug 'mattn/emmet-vim' " HTML CSS toolkit
-Plug 'alvan/vim-closetag' " for HTML
+" Plug 'alvan/vim-closetag' " for HTML
 Plug 'Yggdroot/indentLine' " Show indentation line
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multi cursor
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
@@ -102,6 +111,7 @@ Plug 'sainnhe/everforest'
 
 " LANGUAGE FEATURE -------------------- {{{
 Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
+" now using downloaded packet
 Plug 'honza/vim-snippets' " Snippets library
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
 " }}}
@@ -116,6 +126,10 @@ filetype plugin indent on
 syntax enable
 " }}}
 
+" }}}
+
+" PROVIDER ------------------------------ {{{
+" set pythonthreedll=python3
 " }}}
 
 " PLUGINS ------------------------------ {{{
@@ -150,12 +164,6 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ 'Unknown'   :'?', }
 let NERDTreeShowLineNumbers=1
 
-" Use NERDTree bookmarks
-let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
-" " Create a custom header using figlet for welcome screen
-" let g:startify_custom_header =
-"             \ startify#pad(split(system('figlet -c VIM 2022'), '\n'))
-
 " }}}
 
 " STARTIFY -------------------- {{{
@@ -163,12 +171,13 @@ let g:startify_change_to_dir = 1
 let g:startify_session_autoload    = 1
 let g:startify_session_persistence = 1
 let g:startify_bookmarks = [
-            \ { 'c': '~/Sites/akademik-maqiis' },
+            \ { 'c': '~/Sites/dev.akademik-maqiis' },
             \ '~/Documents/mynotes/Pekerjaan/Almatuq/Maqiis/Laravel.md',
             \ '~/Documents/mynotes',
             \ '~/.zshrc',
             \ '~/.vim/plugged/vim-snippets/UltiSnips/blade.snippets',
             \ ]
+" let g:startify_bookmarks = [ {'c': '~/.vimrc'}, '~/.zshrc' ]
 let g:startify_lists = [
             \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
             \ { 'type': 'files',     'header': ['   Files']            },
@@ -176,8 +185,15 @@ let g:startify_lists = [
             \ { 'type': 'sessions',  'header': ['   Sessions']       },
             \ { 'type': 'commands',  'header': ['   Commands']       },
             \ ]
+
+" Use NERDTree bookmarks
+" let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
+" let g:startify_custom_header =
+"             \ startify#fortune#cowsay('', '═','║','╔','╗','╝','╚')
+" " Create a custom header using figlet for welcome screen
 let g:startify_custom_header =
-            \ startify#fortune#cowsay('', '═','║','╔','╗','╝','╚')
+            \ startify#pad(split(system('figlet -c VIM 2024'), '\n'))
+
 " }}}
 
 " INDENT -------------------- {{{
@@ -216,7 +232,7 @@ autocmd FileType html,css,php,blade EmmetInstall
 
 " Snippet to add meta tag for responsiveness
 let g:user_emmet_settings = {
-\  'variables': {'lang': 'ja'},
+\  'variables': {'lang': 'en'},
 \  'html': {
 \    'default_attributes': {
 \      'option': {'value': v:null},
@@ -239,43 +255,43 @@ let g:user_emmet_settings = {
 " }}}
 
 " AUTO CLOSETAG ---------- {{{
-" filenames like *.xml, *.html, *.xhtml, ...
-" These are the file extensions where this plugin is enabled.
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.blade.php'
-
-" filenames like *.xml, *.xhtml, ...
-" This will make the list of non-closing tags self-closing in the specified files.
-let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
-
-" filetypes like xml, html, xhtml, ...
-" These are the file types where this plugin is enabled.
-let g:closetag_filetypes = 'html,xhtml,phtml,blade'
-
-" filetypes like xml, xhtml, ...
-" This will make the list of non-closing tags self-closing in the specified files.
-let g:closetag_xhtml_filetypes = 'xhtml,jsx'
-
-" integer value [0|1]
-" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
-let g:closetag_emptyTags_caseSensitive = 1
-
-" DICT
-" Disables auto-close if not in a "valid" region (based on filetype)
-let g:closetag_regions = {
-    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
-    \ 'javascript.jsx': 'jsxRegion',
-    \ 'typescriptreact': 'jsxRegion,tsxRegion',
-    \ 'javascriptreact': 'jsxRegion',
-    \ }
-
-" Shortcut for closing tags, default is '>'
-let g:closetag_shortcut = '>'
-
-" Add > at current position without closing the current tag, default is ''
-let g:closetag_close_shortcut = '<F4>'
-
-" Enables closing tags for React fragments -> <></> for all supported file types
-let g:closetag_enable_react_fragment = 1
+" " filenames like *.xml, *.html, *.xhtml, ...
+" " These are the file extensions where this plugin is enabled.
+" let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.blade.php'
+"
+" " filenames like *.xml, *.xhtml, ...
+" " This will make the list of non-closing tags self-closing in the specified files.
+" let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+"
+" " filetypes like xml, html, xhtml, ...
+" " These are the file types where this plugin is enabled.
+" let g:closetag_filetypes = 'html,xhtml,phtml,blade'
+"
+" " filetypes like xml, xhtml, ...
+" " This will make the list of non-closing tags self-closing in the specified files.
+" let g:closetag_xhtml_filetypes = 'xhtml,jsx'
+"
+" " integer value [0|1]
+" " This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
+" let g:closetag_emptyTags_caseSensitive = 1
+"
+" " DICT
+" " Disables auto-close if not in a "valid" region (based on filetype)
+" let g:closetag_regions = {
+"     \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+"     \ 'javascript.jsx': 'jsxRegion',
+"     \ 'typescriptreact': 'jsxRegion,tsxRegion',
+"     \ 'javascriptreact': 'jsxRegion',
+"     \ }
+"
+" " Shortcut for closing tags, default is '>'
+" let g:closetag_shortcut = '>'
+"
+" " Add > at current position without closing the current tag, default is ''
+" let g:closetag_close_shortcut = '<F4>'
+"
+" " Enables closing tags for React fragments -> <></> for all supported file types
+" let g:closetag_enable_react_fragment = 1
 " }}}
 
 " TEX-CONCEAL -------------------- {{{
@@ -361,14 +377,17 @@ let g:lightline = {
 " let g:gitgutter_sign_removed_first_line = '‾'
 " let g:gitgutter_sign_removed_above_and_below = '_¯'
 " let g:gitgutter_sign_modified_removed   = '~_'
+
 function! GitStatus()
   let [a,m,r] = GitGutterGetHunkSummary()
   return printf('+%d ~%d -%d', a, m, r)
 endfunction
 set statusline+=%{GitStatus()}
+
 " }}}
 
 " ALE -------------------- {{{
+
 let g:ale_linters = {
 \   'java': ['javac'],
 \   'javascript': ['jshint'],
@@ -390,15 +409,18 @@ let g:ale_php_phpcs_standard="PSR1"
 " }}}
 
 " MATCHIT -------------------- {{{
+
 if has('syntax') && has('eval') && &filetype == 'html'
     packadd! matchit
 endif
 " To use the matchit plugin after Vim has started, execute this command:
 " packadd matchit
 " The default is disabled, so if you feel Vim goes slow then disable matchit.
+
 " }}}
 
 " EDITORCONFIG -------------------- {{{
+
 " Similar to the matchit package.
 if has('syntax') && has('eval')
     packadd! editorconfig
@@ -413,13 +435,18 @@ let g:UltiSnipsExpandTrigger="<CR>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 autocmd Filetype blade UltiSnipsAddFiletypes blade.html
-" let g:UltiSnipsEditSplit="normal"
+let g:UltiSnipsEditSplit="normal"
 " }}}
 
 " FZF VIM -------------------- {{{
 set rtp+=/usr/local/opt/fzf
 " }}}
 
+" ledger ------------------------------ {{{
+let g:ledger_extra_options = '--pedantic --explicit --check-payees'
+au FileType ledger noremap { ?^\d<CR>
+au FileType ledger noremap } /^\d<CR>
+" }}}
 " }}}
 
 " PREFERENCES ------------------------------ {{{
@@ -531,6 +558,11 @@ if &term == 'win32' || &term == 'xterm-256color'
   hi Normal ctermfg=NONE ctermbg=NONE guibg=NONE
   hi NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
 endif
+
+function! TransparentBackground()
+  hi Normal ctermfg=NONE ctermbg=NONE guibg=NONE
+  hi NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
+endfunction
 " }}}
 
 " MACVIM/GVIM FONT -------------------- {{{
@@ -592,8 +624,8 @@ map <esc> :noh <CR> " Clearing highlight after searching every you click <esc>
 " }}}
 
 " SCROLLING IN INSERT MODE -------------------- {{{
-:inoremap <C-E> <C-X><C-E>
-:inoremap <C-Y> <C-X><C-Y>
+" :inoremap <C-E> <C-X><C-E>
+" :inoremap <C-Y> <C-X><C-Y>
 " }}}
 
 " SCROLLING FOR OTHER SPLIT WINDOWS (JUST 2 WINDOWS )-------------------- {{{
@@ -648,6 +680,7 @@ noremap <leader>s :tabn<CR>
 " BUFFER NAV
 noremap <leader>z :bp<CR>
 noremap <leader>x :bn<CR>
+noremap <leader>c :BD<CR>
 
 " CLOSE BUFFER
 " noremap <leader>c :bd<CR> ga tau kenapa malah nutup satu aplikasi
@@ -734,7 +767,7 @@ augroup filetype_vim
 augroup END
 
 " If the current file type is HTML/Blade, set indentation to 4 spaces.
-autocmd Filetype html,css,js,blade setlocal tabstop=4 shiftwidth=4 expandtab foldmethod=indent
+autocmd Filetype html,css,js,php,blade setlocal tabstop=4 shiftwidth=4 expandtab foldmethod=indent
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -775,15 +808,18 @@ set linebreak
 set mouse=nvi
 set nobackup
 set noswapfile
-set nowb
+set nowritebackup
 set nowrap
 set number relativenumber
 set scrolloff=8
 set secure
 set showcmd " Show partial command you type in the last line of the screen.
 set smartindent
-set textwidth=80
 " set synmaxcol=0 " zero will makes highligthing all line and slow down for
+
+set textwidth=0
+" Maximum width of text that is being inserted.  A longer line will be broken after white space to get this width.  A zero value disables this.
+
 " }}}
 
 " INDENT {{{
@@ -809,6 +845,7 @@ if has("autocmd") && exists("+omnifunc")
         \ setlocal omnifunc=syntaxcomplete#Complete |
         \ endif
 endif
+
 set wildmenu " Enable auto completion menu after pressing TAB.
 set wildmode=full
 set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
@@ -823,4 +860,10 @@ set guioptions-=l
 set guioptions-=L
 " }}}
 
+" Set my Vim learning file in txt as helpfile
+if has('unix') && system("uname -a") =~ "\cArch"
+  autocmd BufRead,BufNewFile ~/Documents/mynotes/pendidikan/Komputer/Learn\ VIM.txt setlocal filetype=help
+elseif has('win32') || has('win64')
+    echo "hor"
+endif
 " }}}
