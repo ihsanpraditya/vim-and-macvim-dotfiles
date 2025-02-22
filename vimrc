@@ -21,6 +21,7 @@
     " Ultisnips
     " FZF VIM
     " Ledger
+    " Vdebug
 " 2. Vim's preferences :
     " Fzf search
     " Background switch button
@@ -71,7 +72,6 @@ Plug 'mhinz/vim-startify' " welcome page
 Plug 'scrooloose/nerdtree' " file explorer at side bar.
 Plug 'Xuyuanp/nerdtree-git-plugin' " Git symbol at Nerd explorer
 Plug 'preservim/tagbar' " displays tags in a window, ordered by scope
-Plug 'tpope/vim-fugitive' " A Git wrapper
 Plug 'airblade/vim-gitgutter' " shows git diff markers in the sign column and stages/previews/undoes hunks & partial
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -81,6 +81,11 @@ Plug 'qpkorr/vim-bufkill' " unload, delete or wipe a buffer without closing the 
 " Plug 'ervandew/supertab' " Perform all your vim insert mode completions with Tab
 Plug 'wolandark/vim-live-server'
 " Plug 'ycm-core/YouCompleteMe' " Completion engine
+Plug 'tpope/vim-dotenv'
+Plug 'tpope/vim-fugitive' " A Git wrapper
+Plug 'tpope/vim-dadbod' " Modern database interface for Vim
+Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'kristijanhusak/vim-dadbod-completion'
 " }}}
 
 " EDITING -------------------- {{{
@@ -101,14 +106,14 @@ Plug 'ledger/vim-ledger'
 
 " APPEARANCE -------------------- {{{
 Plug 'itchyny/lightline.vim'
-Plug 'altercation/vim-colors-solarized' " theme
-Plug 'tomasr/molokai' " theme
+Plug 'altercation/vim-colors-solarized' " notgc theme
+Plug 'tomasr/molokai' " notgc theme
 Plug 'dracula/vim', { 'as': 'dracula' } " theme
 Plug 'NLKNguyen/papercolor-theme' " theme by Goole
 Plug 'safv12/andromeda.vim' " Darktheme from vscode
-Plug 'junegunn/seoul256.vim' "🌳 Low-contrast Vim color scheme based on Seoul Colors
-Plug 'nordtheme/vim'
-Plug 'sainnhe/everforest'
+Plug 'junegunn/seoul256.vim' "🌳 notgc Low-contrast Vim color scheme based on Seoul Colors
+Plug 'nordtheme/vim' " notgc theme
+Plug 'sainnhe/everforest' " notgc theme
 " }}}
 
 " LANGUAGE FEATURE -------------------- {{{
@@ -116,6 +121,7 @@ Plug 'SirVer/ultisnips' " Ultimate snippet engine for Vim
 " now using downloaded packet
 Plug 'honza/vim-snippets' " Snippets library
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
+Plug 'vim-vdebug/vdebug'
 " }}}
 
 " LINTER -------------------- {{{
@@ -456,6 +462,11 @@ let g:ledger_extra_options = '--pedantic --explicit --check-payees'
 au FileType ledger noremap { ?^\d<CR>
 au FileType ledger noremap } /^\d<CR>
 " }}}
+" Vdebug ------------------------------ {{{
+let g:vdebug_options = {
+      \ 'port' : 9003,
+      \}
+" }}}
 " }}}
 
 " PREFERENCES ------------------------------ {{{
@@ -494,8 +505,12 @@ hi Comment cterm=italic gui=italic ctermfg=DarkGray guifg=Gray
 hi Pmenu ctermbg=DarkGreen
 
 " COLORSCHEME
+let g:molokai_original=1
+let g:rehash256=1
 set background=dark " you have to put set bg before colo cmd
-colorscheme retrobox
+colorscheme molokai
+autocmd ColorScheme everforest,nord,andromeda,PaperColor,solarized set notermguicolors
+autocmd ColorScheme molokai set termguicolors
 " LIGHT COLOR
 " Blue (but set bg to dark, wkwk)
 " delek
@@ -685,6 +700,9 @@ noremap <Leader>E :tabe <C-R>=expand("%:p:h") . "/" <CR>
 " TAB NAV
 noremap <leader>a :tabN<CR>
 noremap <leader>s :tabn<CR>
+
+" DBUI
+noremap <leader>d :DBUIToggle<CR>
 
 " BUFFER NAV
 noremap <leader>z :bp<CR>
@@ -876,7 +894,7 @@ set guioptions-=L
 
 " Set my Vim learning file in txt as helpfile
 if has('unix') && system("uname -a") =~ "\cArch"
-  autocmd BufRead,BufNewFile ~/Documents/mynotes/pendidikan/Komputer/Learn\ VIM.txt setlocal filetype=help
+  autocmd BufRead,BufNewFile "~/Documents/mynotes/pendidikan/Komputer/Learn VIM.txt" setlocal filetype=help
 elseif has('win32') || has('win64')
     echo "hor"
 endif
