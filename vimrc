@@ -102,6 +102,7 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'godlygeek/tabular'
 Plug 'ledger/vim-ledger'
+Plug 'editorconfig/editorconfig-vim' " helps maintain consistent coding styles for multiple developers working on the same project across various editors and IDEs.
 " }}}
 
 " APPEARANCE -------------------- {{{
@@ -467,6 +468,11 @@ let g:vdebug_options = {
       \ 'port' : 9003,
       \}
 " }}}
+
+" editorconfig -------------------- {{{
+let g:EditorConfig_disable = 1
+" }}}
+
 " }}}
 
 " PREFERENCES ------------------------------ {{{
@@ -508,9 +514,9 @@ hi Pmenu ctermbg=DarkGreen
 let g:molokai_original=1
 let g:rehash256=1
 set background=dark " you have to put set bg before colo cmd
-colorscheme molokai
-autocmd ColorScheme everforest,nord,andromeda,PaperColor,solarized set notermguicolors
-autocmd ColorScheme molokai set termguicolors
+colorscheme nord
+autocmd ColorScheme everforest,andromeda,PaperColor,solarized set notermguicolors
+autocmd ColorScheme molokai,nord set termguicolors
 " LIGHT COLOR
 " Blue (but set bg to dark, wkwk)
 " delek
@@ -703,11 +709,13 @@ noremap <leader>s :tabn<CR>
 
 " DBUI
 noremap <leader>d :DBUIToggle<CR>
+autocmd FileType mysql setlocal omnifunc=vim_dadbod_completion#omni
 
 " BUFFER NAV
 noremap <leader>z :bp<CR>
 noremap <leader>x :bn<CR>
 noremap <leader>c :BD<CR>
+noremap <leader>C :BD!<CR>
 
 " CLOSE BUFFER
 " noremap <leader>c :bd<CR> ga tau kenapa malah nutup satu aplikasi
