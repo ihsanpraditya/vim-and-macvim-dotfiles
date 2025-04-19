@@ -86,6 +86,7 @@ Plug 'tpope/vim-fugitive' " A Git wrapper
 Plug 'tpope/vim-dadbod' " Modern database interface for Vim
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
+Plug 'easymotion/vim-easymotion'
 " }}}
 
 " EDITING -------------------- {{{
@@ -409,7 +410,7 @@ let g:ale_linters = {
 \   'javascript': ['jshint'],
 \   'markdown': ['markdownlint'],
 \   'php': ['phpcs'],
-\   'typescript': ['eslint'],
+\   'typescript': ['eslint', 'tsserver'],
 \   'vim': ['vimls'],
 \}
 
@@ -427,6 +428,7 @@ let g:ale_php_phpcs_standard="PSR1"
 " MATCHIT -------------------- {{{
 
 if has('syntax') && has('eval') && &filetype == 'html'
+let g:ale_completion_enabled = 1
     packadd! matchit
 endif
 " To use the matchit plugin after Vim has started, execute this command:
@@ -462,6 +464,11 @@ set rtp+=/usr/local/opt/fzf
 let g:ledger_extra_options = '--pedantic --explicit --check-payees'
 au FileType ledger noremap { ?^\d<CR>
 au FileType ledger noremap } /^\d<CR>
+
+" add these lines to after/plugin/tabular_example.vim
+" if !exists(':Tabularize')
+"   AddTabularPattern! ledger_record_account /\(.\)\@<=\s\s/l0c0r0
+" endif
 " }}}
 " Vdebug ------------------------------ {{{
 let g:vdebug_options = {
