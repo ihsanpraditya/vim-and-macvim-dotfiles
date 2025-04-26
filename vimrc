@@ -498,15 +498,16 @@ let &t_EI = "\e[2 q"
 if $TERM =~ '^\(xterm\|rtmux\|xvt\|screen\|nsterm\|interix\|putty\)\(-.*\)\?$'
     " opening vim in non gui available environment
     set notermguicolors
-" elseif $TERM =~ '^\(xterm\|vte\|gnome\|alacritty\)\(-.*\)\?$'
+" elseif $TERM =~ '^\(xterm-256color\|vte\|gnome\|alacritty\)\(-.*\)\?$'
+"     set termguicolors
 else
     " opening vim in gui available environment
     set termguicolors
 endif
 
-" if has('termguicolors')
-"   set termguicolors
-" endif
+if has('termguicolors')
+  set termguicolors
+endif
 " }}}
 
 " COLORING -------------------- {{{
