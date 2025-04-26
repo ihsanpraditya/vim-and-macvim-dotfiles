@@ -409,8 +409,8 @@ let g:ale_linters = {
 \   'java': ['javac'],
 \   'javascript': ['jshint'],
 \   'markdown': ['markdownlint'],
-\   'php': ['phpcs'],
-\   'typescript': ['eslint', 'tsserver'],
+\   'php': ['intelephense'],
+\   'typescript': ['tsserver'],
 \   'vim': ['vimls'],
 \}
 
@@ -422,7 +422,7 @@ let g:ale_fixers = {
 \}
 
 let g:ale_fix_on_save = 1
-let g:ale_php_phpcs_standard="PSR1"
+" let g:ale_php_phpcs_standard="PSR1" " use this when using phpcs as linter
 " }}}
 
 " MATCHIT -------------------- {{{
@@ -480,6 +480,7 @@ let g:vdebug_options = {
 let g:EditorConfig_disable = 1
 " }}}
 
+" }}}
 " }}}
 
 " PREFERENCES ------------------------------ {{{
@@ -706,6 +707,7 @@ nnoremap <leader>. :lcd %:p:h<CR>
 " OPENS AN EDIT COMMAND WITH THE PATH OF THE CURRENTLY EDITED FILE FILLED IN
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 noremap <Leader>E :tabe <C-R>=expand("%:p:h") . "/" <CR>
+noremap <Leader>V :vsp <C-R>=expand("%:p:h") . "/" <CR>
 
 " OPENS A TAB EDIT COMMAND WITH THE PATH OF THE CURRENTLY EDITED FILE FILLED
 " noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
@@ -870,9 +872,10 @@ set textwidth=0
 " }}}
 
 " INDENT {{{
-set shiftwidth=0
-set tabstop=2
-set expandtab
+set shiftwidth=4  " Indent new lines with 4 spaces
+set tabstop=4     " Display existing tabs as 4 spaces
+set expandtab     " Convert tabs to spaces
+" these config used in html/blade config file too
 " }}}
 
 " SEARCHING {{{
@@ -909,7 +912,6 @@ set guioptions-=L
 
 " Set my Vim learning file in txt as helpfile
 if has('unix') && system("uname -a") =~ "\cArch"
-  autocmd BufRead,BufNewFile "~/Documents/mynotes/pendidikan/Komputer/Learn VIM.txt" setlocal filetype=help
 elseif has('win32') || has('win64')
     echo "hor"
 endif
