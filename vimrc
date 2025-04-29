@@ -36,6 +36,8 @@
     " Font
     " Better rainbow parentheses
     " HTML, SQL inside PHP highlighting
+    " Minimap
+    " cUrl
 " 3. Mapping :
     " tab
     " Map clearing highlighting after searching to <esc>
@@ -57,6 +59,7 @@
 " 1. Dadbod: Modern database interface for Vim
 " 2. Abolish: Work with several variants of a word at once
 " }}}
+
 " VIM-PLUG ------------------------------ {{{
 " required before run vim-plug -------------------- {{{
 set nocompatible " Turn off compatible mode.
@@ -87,6 +90,7 @@ Plug 'tpope/vim-dadbod' " Modern database interface for Vim
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 Plug 'easymotion/vim-easymotion'
+Plug 'wfxr/minimap.vim'
 " }}}
 
 " EDITING -------------------- {{{
@@ -479,8 +483,6 @@ let g:vdebug_options = {
 " editorconfig -------------------- {{{
 let g:EditorConfig_disable = 1
 " }}}
-
-" }}}
 " }}}
 
 " PREFERENCES ------------------------------ {{{
@@ -648,6 +650,39 @@ let php_sql_query = 1
 let php_folding = 1
 " }}}
 
+" MINIMAP ------------------------------ {{{
+let g:minimap_width=10
+let g:minimap_auto_start=0
+let g:minimap_auto_start_win_enter=0
+" }}}
+"
+" CURL ---------------------------------------- {{{
+" Get the result in a splitted window
+" 1. Run the following command:
+"    command Exec set splitright | vnew | set filetype=sh | read !sh #
+" 2. Write some cURL command like: curl google.com.
+" 3. Run :Exec.
+" 4. Vertical window will be opened for the result.
+" 5. change to 'splitbelow' and 'new' to make the result horizontally
+"
+" Get the result in a built-in shell
+" 1. just put the cursor on the line of the curl command.
+" 2. make it in one line.
+" 3. Run command :.w !sh
+" 4. Or use '\' in end of line for multiline then drag it with 'v'.
+" 5. Run the command that should look like :'<,'>w !sh, look
+"       that we don't use any period in front of 'w'.
+" 6. If you want a new curl command in a newline, then add '&&'
+"       in front of every newline.
+"
+" Get result in the buffer directly
+" 1. Just write arguments for curl -K.
+" 2. Drag all of the arguments like using 'V'.
+" 3. Run :'<,'>!curl -K -
+"       or simply run :%!curl -K -
+" 4. The result will replace the arguments itself.
+" }}}
+"
 " }}}
 
 " MAPPING ------------------------------ {{{
