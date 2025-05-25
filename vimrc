@@ -290,7 +290,7 @@ let g:user_emmet_settings = {
 " let g:closetag_emptyTags_caseSensitive = 1
 "
 " " DICT
-" " Disables auto-close if not in a "valid" region (based on filetype)
+" " Disables auto-close if not in a 'valid' region (based on filetype)
 " let g:closetag_regions = {
 "     \ 'typescript.tsx': 'jsxRegion,tsxRegion',
 "     \ 'javascript.jsx': 'jsxRegion',
@@ -464,15 +464,20 @@ let g:UltiSnipsEditSplit="normal"
 set rtp+=/usr/local/opt/fzf
 " }}}
 
-" ledger ------------------------------ {{{
+" LEDGER ------------------------------ {{{
 let g:ledger_extra_options = '--pedantic --explicit --check-payees'
-au FileType ledger noremap { ?^\d<CR>
-au FileType ledger noremap } /^\d<CR>
+
+" 1 transaction backward and forward
+autocmd FileType ledger noremap { ?^\d<CR>
+autocmd FileType ledger noremap } /^\d<CR>
+autocmd Filetype ledger setlocal tabstop=2 shiftwidth=2 expandtab
 
 " add these lines to after/plugin/tabular_example.vim
 " if !exists(':Tabularize')
-"   AddTabularPattern! ledger_record_account /\(.\)\@<=\s\s/l0c0r0
+"  AddTabularPattern! ledger_record_account /\(.\)\@<=\s\s/l0c0r0
+"  AddTabularPattern! ledger_payee /;/l2c1l0
 " endif
+"
 " }}}
 " Vdebug ------------------------------ {{{
 let g:vdebug_options = {
