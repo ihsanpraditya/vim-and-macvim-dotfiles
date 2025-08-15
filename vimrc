@@ -35,6 +35,7 @@
     " GVIM/MACVIM
     " Font
     " Better rainbow parentheses
+    " PHP config
     " HTML, SQL inside PHP highlighting
     " Minimap
     " cUrl
@@ -91,22 +92,23 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 Plug 'easymotion/vim-easymotion'
 Plug 'wfxr/minimap.vim'
+Plug 'ludovicchabant/vim-gutentags'
 " }}}
 
 " EDITING -------------------- {{{
 Plug 'jiangmiao/auto-pairs' " auto pair bracket, etc
 Plug 'tpope/vim-surround' " Surround shortcut
 Plug 'mattn/emmet-vim' " HTML CSS toolkit
-" Plug 'alvan/vim-closetag' " for HTML
+" Plug 'alvan/vim-closetag' " auto close tag for language like HTML
 Plug 'Yggdroot/indentLine' " Show indentation line
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multi cursor
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'lervag/vimtex', { 'tag': 'v2.15' }
+Plug 'lervag/vimtex', { 'tag': 'v2.15' } " integrate TeX engine with VIM
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'tomtom/tcomment_vim'
-Plug 'godlygeek/tabular'
-Plug 'ledger/vim-ledger'
+Plug 'godlygeek/tabular' " make a line a character
+Plug 'ledger/vim-ledger' " for ledger-cli
 Plug 'editorconfig/editorconfig-vim' " helps maintain consistent coding styles for multiple developers working on the same project across various editors and IDEs.
 " }}}
 
@@ -530,9 +532,10 @@ hi Pmenu ctermbg=DarkGreen
 let g:molokai_original=1
 let g:rehash256=1
 set background=dark " you have to put set bg before colo cmd
-colorscheme nord
+colorscheme molokai
 autocmd ColorScheme everforest,andromeda,PaperColor,solarized set notermguicolors
 autocmd ColorScheme molokai,nord set termguicolors
+autocmd ColorScheme default set notermguicolors set background=dark set nocursorline
 " LIGHT COLOR
 " Blue (but set bg to dark, wkwk)
 " delek
@@ -647,6 +650,9 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+" }}}
+
+" PHP CONFIG ------------------------------ {{{
 " }}}
 
 " HTML, SQL INSIDE PHP HIGHLIGHTING -------------------- {{{
